@@ -343,10 +343,18 @@
           --spark-product-card-select-min-height: 0; /* Set a min-height for select menu*/
         }
 
+        /* This hides the default mini cart behaviour */
         .cart-count-bubble,
         cart-drawer {
           display: none !important;
         }
+
+        /* This sets product cards to bottom align the SparkLayer product card widget */
+        .card-wrapper {
+            justify-content: space-between;
+            height: 100%;
+        }
+
       </style>
 
       <!-- End SparkLayer Sample CSS Code -->
