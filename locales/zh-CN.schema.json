@@ -359,10 +359,13 @@
             "label": "无"
           },
           "options__2": {
-            "label": "3D 提升"
+            "label": "垂直提升"
           },
           "label": "悬停效果",
-          "info": "影响卡和按钮。"
+          "info": "影响卡和按钮。",
+          "options__3": {
+            "label": "3D 提升"
+          }
         }
       }
     }
@@ -434,6 +437,9 @@
           "label": "图片行为",
           "options__3": {
             "label": "修复背景位置"
+          },
+          "options__4": {
+            "label": "滚动时放大"
           }
         }
       }
@@ -467,11 +473,38 @@
       },
       "settings": {
         "auto_rotate": {
-          "label": "自动旋转幻灯片"
+          "label": "自动循环展示公告"
         },
         "change_slides_speed": {
-          "label": "幻灯片更换时间间隔"
+          "label": "更换时间间隔"
+        },
+        "header__1": {
+          "content": "社交媒体图标",
+          "info": "若要显示您的社交媒体账户，请在 [模板设置](/editor?context=theme&category=social%20media) 中添加其链接。"
+        },
+        "header__2": {
+          "content": "公告"
+        },
+        "show_social": {
+          "label": "在桌面上显示图标"
+        },
+        "header__3": {
+          "content": "国家/地区选择器",
+          "info": "若要添加国家/地区，请转到 [市场设置](/admin/settings/markets)。"
+        },
+        "enable_country_selector": {
+          "label": "启用国家/地区选择器"
+        },
+        "header__4": {
+          "content": "语言选择器",
+          "info": "若要添加语言，请转到您的 [语言设置](/admin/settings/languages)。"
+        },
+        "enable_language_selector": {
+          "label": "启用语言选择器"
         }
+      },
+      "presets": {
+        "name": "公告栏"
       }
     },
     "collage": {
@@ -627,8 +660,8 @@
       "name": "自定义 Liquid",
       "settings": {
         "custom_liquid": {
-          "label": "自定义 Liquid",
-          "info": "添加应用代码片段或其他 Liquid 代码以创建高级自定义。"
+          "label": "Liquid 代码",
+          "info": "添加应用代码片段或其他代码以创建高级自定义。[了解详细信息](https://shopify.dev/docs/api/liquid)"
         }
       },
       "presets": {
@@ -961,6 +994,12 @@
         },
         "enable_language_selector": {
           "label": "启用语言选择器"
+        },
+        "header__1": {
+          "content": "颜色"
+        },
+        "menu_color_scheme": {
+          "label": "菜单配色方案"
         }
       }
     },
@@ -972,9 +1011,6 @@
         },
         "image_2": {
           "label": "第二张图片"
-        },
-        "color_scheme": {
-          "info": "在显示容器时可见。"
         },
         "stack_images_on_mobile": {
           "label": "在移动设备上堆叠图片"
@@ -1245,6 +1281,9 @@
             },
             "button_link": {
               "label": "按钮链接"
+            },
+            "outline_button": {
+              "label": "使用轮廓按钮样式"
             }
           },
           "name": "按钮"
@@ -1609,8 +1648,8 @@
               "info": "通过使用您商店中提供的付款方式，客户会看到他们的首选付款方式，例如 PayPal 或 Apple Pay。[了解详细信息](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
             },
             "show_gift_card_recipient": {
-              "label": "显示礼品卡产品的收件人信息表单",
-              "info": "礼品卡产品可以选择在预定的日期直接寄给收件人，并附上个人信息。[了解更多信息](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-gift-card-recipient-fields)"
+              "label": "显示礼品卡的收件人信息表单",
+              "info": "允许客户在预定日期发送礼品卡并附加私人消息。[了解详细信息](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-gift-card-recipient-fields)"
             }
           },
           "name": "Buy Button"
@@ -1804,15 +1843,6 @@
         },
         "description": {
           "name": "描述"
-        },
-        "custom_liquid": {
-          "name": "自定义 liquid",
-          "settings": {
-            "custom_liquid": {
-              "label": "自定义 liquid",
-              "info": "添加应用代码片段或其他 Liquid 代码以创建高级自定义。"
-            }
-          }
         },
         "rating": {
           "name": "产品评分",
@@ -2488,14 +2518,6 @@
             }
           }
         },
-        "custom_liquid": {
-          "name": "自定义 liquid",
-          "settings": {
-            "custom_liquid": {
-              "label": "自定义 liquid"
-            }
-          }
-        },
         "rating": {
           "name": "产品评分",
           "settings": {
@@ -2648,6 +2670,9 @@
             "label": "右"
           },
           "label": "移动设备内容对齐方式"
+        },
+        "color_scheme": {
+          "info": "在显示容器时可见。"
         }
       },
       "blocks": {
@@ -3283,6 +3308,20 @@
       },
       "presets": {
         "name": "多行"
+      }
+    },
+    "quick-order-list": {
+      "name": "快速订单列表",
+      "settings": {
+        "show_image": {
+          "label": "显示图片"
+        },
+        "show_sku": {
+          "label": "显示 SKU"
+        }
+      },
+      "presets": {
+        "name": "快速订单列表"
       }
     }
   }

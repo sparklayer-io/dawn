@@ -139,7 +139,7 @@
           "label": "เปิดใช้งานคำแนะนำการค้นหา"
         },
         "predictive_search_show_vendor": {
-          "label": "แสดงผู้ขายสินค้า",
+          "label": "แสดงเวนเดอร์สินค้า",
           "info": "จะปรากฏให้เห็นเมื่อเปิดใช้คำแนะการค้นหา"
         },
         "predictive_search_show_price": {
@@ -270,7 +270,7 @@
           }
         },
         "show_vendor": {
-          "label": "แสดงผู้ขาย"
+          "label": "แสดงเวนเดอร์"
         },
         "show_cart_note": {
           "label": "เปิดใช้หมายเหตุสำหรับตะกร้าสินค้า"
@@ -359,10 +359,13 @@
             "label": "ไม่มี"
           },
           "options__2": {
-            "label": "การยกนูน 3 มิติ"
+            "label": "การยกนูนในแนวตั้ง"
           },
           "label": "เอฟเฟ็กต์การวางเมาส์",
-          "info": "ส่งผลต่อการ์ดและปุ่ม"
+          "info": "ส่งผลต่อการ์ดและปุ่ม",
+          "options__3": {
+            "label": "การยกนูน 3 มิติ"
+          }
         }
       }
     }
@@ -434,6 +437,9 @@
           "label": "พฤติกรรมภาพ",
           "options__3": {
             "label": "ตำแหน่งพื้นหลังได้รับการแก้ไข"
+          },
+          "options__4": {
+            "label": "ซูมเข้าเมื่อเลื่อนเมาส์"
           }
         }
       }
@@ -467,11 +473,38 @@
       },
       "settings": {
         "auto_rotate": {
-          "label": "หมุนสไลด์อัตโนมัติ"
+          "label": "เปลี่ยนประกาศอัตโนมัติ"
         },
         "change_slides_speed": {
-          "label": "เปลี่ยนสไลด์ทุก"
+          "label": "เปลี่ยนทุก"
+        },
+        "header__1": {
+          "content": "ไอคอนโซเชียลมีเดีย",
+          "info": "หากต้องการแสดงบัญชีผู้ใช้โซเชียลมีเดียของคุณ ให้ลิงก์บัญชีไว้ใน[การตั้งค่าธีม](/editor?context=theme&category=social%20media)"
+        },
+        "header__2": {
+          "content": "ประกาศ"
+        },
+        "show_social": {
+          "label": "แสดงไอคอนบนเดสก์ท็อป"
+        },
+        "header__3": {
+          "content": "ตัวเลือกประเทศ/ภูมิภาค",
+          "info": "หากต้องการเพิ่มประเทศ/ภูมิภาค ให้ไปที่ [การตั้งค่าตลาด](/admin/settings/markets)"
+        },
+        "enable_country_selector": {
+          "label": "เปิดใช้ตัวเลือกประเทศ/ภูมิภาค"
+        },
+        "header__4": {
+          "content": "ตัวเลือกภาษา",
+          "info": "หากต้องการเพิ่มภาษา ให้ไปที่ [การตั้งค่าภาษา](/admin/settings/languages)"
+        },
+        "enable_language_selector": {
+          "label": "เปิดใช้ตัวเลือกภาษา"
         }
+      },
+      "presets": {
+        "name": "แถบประกาศ"
       }
     },
     "collage": {
@@ -627,8 +660,8 @@
       "name": "ปรับแต่ง Liquid",
       "settings": {
         "custom_liquid": {
-          "label": "ปรับแต่ง Liquid",
-          "info": "เพิ่มส่วนย่อยของแอปหรือโค้ด Liquid อื่นๆ เพื่อสร้างการปรับแต่งขั้นสูง"
+          "label": "โค้ด Liquid",
+          "info": "เพิ่มส่วนย่อยของแอปหรือโค้ดอื่นๆ เพื่อสร้างการปรับแต่งขั้นสูง [ดูข้อมูลเพิ่มเติม](https://shopify.dev/docs/api/liquid)"
         }
       },
       "presets": {
@@ -702,7 +735,7 @@
           "label": "แสดงรูปภาพที่สองเมื่อนำเมาส์ไปวาง"
         },
         "show_vendor": {
-          "label": "แสดงผู้ขาย"
+          "label": "แสดงเวนเดอร์"
         },
         "show_rating": {
           "label": "แสดงคะแนนของสินค้า",
@@ -961,6 +994,12 @@
         },
         "enable_language_selector": {
           "label": "เปิดใช้งานตัวเลือกภาษา"
+        },
+        "header__1": {
+          "content": "สี"
+        },
+        "menu_color_scheme": {
+          "label": "รูปแบบสีเมนู"
         }
       }
     },
@@ -972,9 +1011,6 @@
         },
         "image_2": {
           "label": "รูปภาพที่สอง"
-        },
-        "color_scheme": {
-          "info": "ปรากฏให้เห็นเมื่อแสดงคอนเทนเนอร์"
         },
         "stack_images_on_mobile": {
           "label": "การรวมภาพบนมือถือ"
@@ -1245,6 +1281,9 @@
             },
             "button_link": {
               "label": "ลิงก์ปุ่ม"
+            },
+            "outline_button": {
+              "label": "ใช้รูปแบบปุ่มแบบเค้าโครง"
             }
           },
           "name": "ปุ่ม"
@@ -1434,7 +1473,7 @@
           "label": "แสดงรูปภาพที่สองเมื่อนำเมาส์ไปวาง"
         },
         "show_vendor": {
-          "label": "แสดงผู้ขาย"
+          "label": "แสดงเวนเดอร์"
         },
         "header__1": {
           "content": "การกรองและการจัดเรียง"
@@ -1609,8 +1648,8 @@
               "info": "วิธีการชำระเงินที่พร้อมใช้งานบนร้านค้าของคุณ จะช่วยให้ลูกค้าเห็นตัวเลือกที่พวกเขาต้องการ เช่น PayPal หรือ Apple Pay  [ดูข้อมูลเพิ่มเติม](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
             },
             "show_gift_card_recipient": {
-              "label": "แสดงแบบฟอร์มข้อมูลผู้รับสำหรับผลิตภัณฑ์บัตรของขวัญ",
-              "info": "สามารถเลือกส่งผลิตภัณฑ์บัตรของขวัญตรงถึงผู้รับพร้อมข้อความของตนเองวันที่กำหนดเวลาไว้ได้ [ดูข้อมูลเพิ่มเติม](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-gift-card-recipient-fields)"
+              "label": "แสดงแบบฟอร์มข้อมูลผู้รับสำหรับบัตรของขวัญ",
+              "info": "อนุญาตให้ผู้ซื้อส่งบัตรของขวัญพร้อมข้อความของตนเองในวันที่กำหนดเวลาไว้ได้ [ดูข้อมูลเพิ่มเติม](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-gift-card-recipient-fields)"
             }
           },
           "name": "ปุ่มซื้อ"
@@ -1804,15 +1843,6 @@
         },
         "description": {
           "name": "คำอธิบาย"
-        },
-        "custom_liquid": {
-          "name": "ปรับแต่ง Liquid",
-          "settings": {
-            "custom_liquid": {
-              "label": "ปรับแต่ง Liquid",
-              "info": "เพิ่มส่วนย่อยของแอปหรือโค้ด Liquid อื่นๆ เพื่อสร้างการปรับแต่งขั้นสูง"
-            }
-          }
         },
         "rating": {
           "name": "คะแนนของสินค้า",
@@ -2066,7 +2096,7 @@
           "label": "แสดงรูปภาพที่สองเมื่อนำเมาส์ไปวาง"
         },
         "show_vendor": {
-          "label": "แสดงผู้ขาย"
+          "label": "แสดงเวนเดอร์"
         },
         "header__1": {
           "content": "บัตรสินค้า"
@@ -2488,14 +2518,6 @@
             }
           }
         },
-        "custom_liquid": {
-          "name": "ปรับแต่ง Liquid",
-          "settings": {
-            "custom_liquid": {
-              "label": "ปรับแต่ง Liquid"
-            }
-          }
-        },
         "rating": {
           "name": "คะแนนของสินค้า",
           "settings": {
@@ -2648,6 +2670,9 @@
             "label": "ขวา"
           },
           "label": "การจัดวางเนื้อหาบนมือถือ"
+        },
+        "color_scheme": {
+          "info": "ปรากฏให้เห็นเมื่อแสดงกรอบเนื้อหา"
         }
       },
       "blocks": {
@@ -3112,7 +3137,7 @@
           "label": "แสดงรูปภาพที่สองเมื่อนำเมาส์ไปวาง"
         },
         "show_vendor": {
-          "label": "แสดงผู้ขาย"
+          "label": "แสดงเวนเดอร์"
         },
         "show_rating": {
           "label": "แสดงคะแนนของสินค้า",
@@ -3283,6 +3308,20 @@
       },
       "presets": {
         "name": "หลายแถว"
+      }
+    },
+    "quick-order-list": {
+      "name": "รายการคำสั่งซื้อแบบด่วน",
+      "settings": {
+        "show_image": {
+          "label": "แสดงรูปภาพ"
+        },
+        "show_sku": {
+          "label": "แสดง SKU"
+        }
+      },
+      "presets": {
+        "name": "รายการคำสั่งซื้อแบบด่วน"
       }
     }
   }
