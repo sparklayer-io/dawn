@@ -1,5 +1,5 @@
 {% assign productTags = product.tags | join: ', ' %}
-{% assign customerTags = customer.tags | join: ', ' %}
+
 
 {% if productTags contains 'b2b-only' %}
   {%- if customer.metafields.sparklayer.authentication -%}
@@ -8,7 +8,7 @@
     <script>
       window.location.href = '/collections/all';
     </script>
-  {%- endif-%}
+  {%- endif -%}
 {% endif %}
 
 <section

@@ -10,7 +10,7 @@
 
 <div class="page-width">
   <div class="b2b-login-wrapper">
-    <div class="b2b-intro-image" style="background-image: url('{{ section.settings.featured_image.src | img_url: '1000x' }}');background-color: {{ section.settings.background_color }}; background-repeat: no-repeat;">
+    <div class="b2b-intro-image" style="background-image: url('{{ section.settings.featured_image.src | image_url: width: 1000 }}');background-color: {{ section.settings.background_color }}; background-repeat: no-repeat;">
     </div>
 
     <div class="b2b-login-area" style="background: {{ section.settings.background_color }};">
@@ -206,7 +206,7 @@
 
         <div class="b2b-faqs" id="faqs">
           <h3>{{ section.settings.faq_title }}</h3>
-          {% for block in section.blocks limit:5 %}
+          {% for block in section.blocks limit: 5 %}
             <div class="faq-tab">
               <a class="item-accordion">
                 {{ block.settings.block_title }}
@@ -244,109 +244,107 @@
 </script>
 
 {% schema %}
+{
+  "name": "Login Page",
+  "settings": [
     {
-        "name": "Login Page",
-        "settings" : [
-            {
-                "type": "image_picker",
-                "id": "featured_image",
-                "label": "Background Image",
-                "info": "The image should ideally be rectangular"
-            },
-            {
-                "type": "color",
-                "id": "background_color",
-                "label": "Background color",
-                "default": "#f1f1f1"
-            },
-            {
-                "type": "text",
-                "id": "title",
-                "label": "Title",
-                "default": "Welcome to our trade login"
-            },
-            {
-                "type": "textarea",
-                "id": "intro_text",
-                "label": "Intoduction Text",
-                "default": "Sign in below to get instant access to your trade account and to start placing orders."
-            },
-            {
-                "type": "text",
-                "id": "open_account_title",
-                "label": "Open Account Title",
-                "default": "Interest in opening an account?"
-            },
-            {
-                "type": "richtext",
-                "id": "open_account_text",
-                "label": "Open Account Text",
-                "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>"
-            },
-            {
-                "type": "text",
-                "id": "open_account_button",
-                "label": "Open Account Button Title",
-                "default": "Apply for an account"
-            },
-            {
-                "type": "checkbox",
-                "id": "use_custom_form",
-                "label": "Use custom contact form",
-                "info": "If enabled, you can paste in your HTML below. If disabled, the standard Shopify contact form will be used and the fields can be customised within the trade-application.liquid template",
-                "default": false
-            },
-            {
-                "type": "html",
-                "id": "open_account_form",
-                "label": "Custom Account Application Form",
-                "default": "Paste in form HTML here"
-            },
-            {
-                "type": "checkbox",
-                "id": "show_faqs",
-                "label": "Show FAQs",
-                "info": "If enabled, you can manually add FAQs",
-                "default": true
-            },
-            {
-                "type": "text",
-                "id": "faq_title",
-                "label": "FAQs title",
-                "default": "Question & Answers"
-            }
-        ],
-        "blocks": [
-            {
-                "type": "feature",
-                "name": "FAQs",
-                "settings": [
-                    {
-                        "type": "text",
-                        "id": "block_title",
-                        "label": "Question"
-                    },
-                    {
-                        "type": "richtext",
-                        "id": "block_text",
-                        "label": "Answer"
-                    }
-
-                ]
-            }
-        ],
-        "presets": [
-            {
-                "name": {
-                    "en": "Login Page"
-                },
-                "category": {
-                    "en": "Wholesale & B2B"
-                }
-            }
-        ]
-        
+      "type": "image_picker",
+      "id": "featured_image",
+      "label": "Background Image",
+      "info": "The image should ideally be rectangular"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f1f1f1"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Welcome to our trade login"
+    },
+    {
+      "type": "textarea",
+      "id": "intro_text",
+      "label": "Intoduction Text",
+      "default": "Sign in below to get instant access to your trade account and to start placing orders."
+    },
+    {
+      "type": "text",
+      "id": "open_account_title",
+      "label": "Open Account Title",
+      "default": "Interest in opening an account?"
+    },
+    {
+      "type": "richtext",
+      "id": "open_account_text",
+      "label": "Open Account Text",
+      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>"
+    },
+    {
+      "type": "text",
+      "id": "open_account_button",
+      "label": "Open Account Button Title",
+      "default": "Apply for an account"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_form",
+      "label": "Use custom contact form",
+      "info": "If enabled, you can paste in your HTML below. If disabled, the standard Shopify contact form will be used and the fields can be customised within the trade-application.liquid template",
+      "default": false
+    },
+    {
+      "type": "html",
+      "id": "open_account_form",
+      "label": "Custom Account Application Form",
+      "default": "Paste in form HTML here"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_faqs",
+      "label": "Show FAQs",
+      "info": "If enabled, you can manually add FAQs",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "faq_title",
+      "label": "FAQs title",
+      "default": "Question & Answers"
     }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "FAQs",
+      "settings": [
+        {
+          "type": "text",
+          "id": "block_title",
+          "label": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "block_text",
+          "label": "Answer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "en": "Login Page"
+      },
+      "category": {
+        "en": "Wholesale & B2B"
+      }
+    }
+  ]
+}
 {% endschema %}
 
 
