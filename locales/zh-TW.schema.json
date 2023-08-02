@@ -359,10 +359,13 @@
             "label": "無"
           },
           "options__2": {
-            "label": "3D 浮起"
+            "label": "垂直浮起"
           },
           "label": "暫留效果",
-          "info": "套用於卡片和按鈕。"
+          "info": "套用於卡片和按鈕。",
+          "options__3": {
+            "label": "3D 浮起"
+          }
         }
       }
     }
@@ -434,6 +437,9 @@
           "label": "圖片行為",
           "options__3": {
             "label": "固定背景位置"
+          },
+          "options__4": {
+            "label": "捲動時放大"
           }
         }
       }
@@ -467,11 +473,38 @@
       },
       "settings": {
         "auto_rotate": {
-          "label": "自動輪播投影片"
+          "label": "自動輪播公告"
         },
         "change_slides_speed": {
-          "label": "每過以下時間即變更投影片"
+          "label": "變更頻率"
+        },
+        "header__1": {
+          "content": "社群媒體圖示",
+          "info": "若要顯示社群媒體帳號，請在您的 [佈景主題設定](/editor?context=theme&category=social%20media) 中連接帳號。"
+        },
+        "header__2": {
+          "content": "公告"
+        },
+        "show_social": {
+          "label": "在桌面顯示圖示"
+        },
+        "header__3": {
+          "content": "國家/地區選擇器",
+          "info": "若要新增國家/地區，請前往 [市場設定](/admin/settings/markets)"
+        },
+        "enable_country_selector": {
+          "label": "啟用國家/地區選擇器"
+        },
+        "header__4": {
+          "content": "語言選擇器",
+          "info": "若要新增語言，請前往 [語言設定。](/admin/settings/languages)"
+        },
+        "enable_language_selector": {
+          "label": "啟用語言選擇器"
         }
+      },
+      "presets": {
+        "name": "公告列"
       }
     },
     "collage": {
@@ -627,8 +660,8 @@
       "name": "自訂 Liquid",
       "settings": {
         "custom_liquid": {
-          "label": "自訂 Liquid",
-          "info": "新增應用程式程式碼片段或其他 Liquid 碼以建立進階自訂內容。"
+          "label": "Liquid 程式碼",
+          "info": "新增應用程式程式碼片段或其他程式碼以建立進階自訂內容。[瞭解詳情](https://shopify.dev/docs/api/liquid)"
         }
       },
       "presets": {
@@ -961,6 +994,12 @@
         },
         "enable_language_selector": {
           "label": "啟用語言選擇器"
+        },
+        "header__1": {
+          "content": "顏色"
+        },
+        "menu_color_scheme": {
+          "label": "選單顏色配置"
         }
       }
     },
@@ -972,9 +1011,6 @@
         },
         "image_2": {
           "label": "第二張圖片"
-        },
-        "color_scheme": {
-          "info": "顯示容器時可見。"
         },
         "stack_images_on_mobile": {
           "label": "在行動裝置上堆疊圖片"
@@ -1245,6 +1281,9 @@
             },
             "button_link": {
               "label": "按鈕連結"
+            },
+            "outline_button": {
+              "label": "使用外框按鈕樣式"
             }
           },
           "name": "按鈕"
@@ -1609,8 +1648,8 @@
               "info": "顧客可以使用您商店可用的付款方式，看見其偏好選項，如 PayPal 或 Apple Pay 。[深入瞭解相關資訊](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
             },
             "show_gift_card_recipient": {
-              "label": "顯示禮品卡商品的收件人資訊表單",
-              "info": "可選擇定期將禮品卡商品與個人化訊息傳送給收件人。[瞭解詳情](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-gift-card-recipient-fields)"
+              "label": "顯示禮品卡的收件人資訊表單",
+              "info": "允許買家在排定的日期傳送禮品卡及個人化訊息。[瞭解詳情](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-gift-card-recipient-fields)"
             }
           },
           "name": "購買按鈕"
@@ -1804,15 +1843,6 @@
         },
         "description": {
           "name": "說明"
-        },
-        "custom_liquid": {
-          "name": "自訂 Liquid",
-          "settings": {
-            "custom_liquid": {
-              "label": "自訂 Liquid",
-              "info": "新增應用程式程式碼片段或其他 Liquid 碼以建立進階自訂內容。"
-            }
-          }
         },
         "rating": {
           "name": "產品評等",
@@ -2488,14 +2518,6 @@
             }
           }
         },
-        "custom_liquid": {
-          "name": "自訂 Liquid",
-          "settings": {
-            "custom_liquid": {
-              "label": "自訂 Liquid"
-            }
-          }
-        },
         "rating": {
           "name": "產品評等",
           "settings": {
@@ -2648,6 +2670,9 @@
             "label": "靠右"
           },
           "label": "行動版內容對齊方式"
+        },
+        "color_scheme": {
+          "info": "顯示容器時可見。"
         }
       },
       "blocks": {
@@ -3283,6 +3308,20 @@
       },
       "presets": {
         "name": "多列"
+      }
+    },
+    "quick-order-list": {
+      "name": "快速訂單清單",
+      "settings": {
+        "show_image": {
+          "label": "顯示圖片"
+        },
+        "show_sku": {
+          "label": "顯示存貨單位 (SKU)"
+        }
+      },
+      "presets": {
+        "name": "快速訂單清單"
       }
     }
   }

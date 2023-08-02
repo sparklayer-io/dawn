@@ -359,10 +359,13 @@
             "label": "Žádný"
           },
           "options__2": {
-            "label": "3D vysunutí"
+            "label": "Svislé vysunutí"
           },
           "label": "Efekt najetí",
-          "info": "Ovlivňuje karty a tlačítka."
+          "info": "Ovlivňuje karty a tlačítka.",
+          "options__3": {
+            "label": "3D vysunutí"
+          }
         }
       }
     }
@@ -434,6 +437,9 @@
           "label": "Chování obrázku",
           "options__3": {
             "label": "Neměnná pozice na pozadí"
+          },
+          "options__4": {
+            "label": "Přiblížit skrolování"
           }
         }
       }
@@ -467,11 +473,38 @@
       },
       "settings": {
         "auto_rotate": {
-          "label": "Automaticky otočit snímky"
+          "label": "Automaticky střídat oznámení"
         },
         "change_slides_speed": {
-          "label": "Změnit snímek co"
+          "label": "Změnit co"
+        },
+        "header__1": {
+          "content": "Ikony sociálních sítí",
+          "info": "Pokud chcete zobrazit své účty na sociálních sítích, přidejte na ně v [nastavení motivu](/editor?context=theme&category=social%20media) příslušné odkazy."
+        },
+        "header__2": {
+          "content": "Oznámení"
+        },
+        "show_social": {
+          "label": "Zobrazit ikony na ploše"
+        },
+        "header__3": {
+          "content": "Selektor země/oblasti",
+          "info": "Pokud chcete přidat zemi nebo oblast, přejděte na [nastavení trhu.](/admin/settings/markets)"
+        },
+        "enable_country_selector": {
+          "label": "Povolit selektor země/oblasti"
+        },
+        "header__4": {
+          "content": "Selektor jazyka",
+          "info": "Pokud chcete přidat jazyk, přejděte na [jazykové nastavení.](/admin/settings/languages)"
+        },
+        "enable_language_selector": {
+          "label": "Povolit selektor jazyka"
         }
+      },
+      "presets": {
+        "name": "Panel oznámení"
       }
     },
     "collage": {
@@ -627,8 +660,8 @@
       "name": "Vlastní kód Liquidu",
       "settings": {
         "custom_liquid": {
-          "label": "Vlastní kód Liquidu",
-          "info": "Přidejte fragmenty aplikací nebo jiný kód Liquidu a vytvořte pokročilá přizpůsobení."
+          "label": "Kód Liquidu",
+          "info": "Přidejte fragmenty aplikací nebo jiný kód a vytvořte pokročilá přizpůsobení. [Zjistit více](https://shopify.dev/docs/api/liquid)"
         }
       },
       "presets": {
@@ -961,6 +994,12 @@
         },
         "enable_language_selector": {
           "label": "Povolit selektor jazyka"
+        },
+        "header__1": {
+          "content": "Barva"
+        },
+        "menu_color_scheme": {
+          "label": "Barevné schéma nabídky"
         }
       }
     },
@@ -972,9 +1011,6 @@
         },
         "image_2": {
           "label": "Druhý obrázek"
-        },
-        "color_scheme": {
-          "info": "Zobrazuje se v případě, že se zobrazuje kontejner."
         },
         "stack_images_on_mobile": {
           "label": "Zobrazit obrázky na mobilním zařízení nad sebou"
@@ -1246,6 +1282,9 @@
             },
             "button_link": {
               "label": "Tlačítkový odkaz"
+            },
+            "outline_button": {
+              "label": "Použít styl tlačítka s obrysem"
             }
           }
         },
@@ -1619,8 +1658,8 @@
               "info": "V rámci platebních metod dostupných v obchodě uvidí zákazníci tu, kterou nejvíce preferují, jako například PayPal nebo Apple Pay. [Zjistit více](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
             },
             "show_gift_card_recipient": {
-              "label": "Zobrazit formulář s informacemi o příjemci u produktů dárkových karet",
-              "info": "Dárkové karty je možné volitelně v naplánované datum posílat přímo příslušnému příjemci společně s osobní zprávou. [Zjistit více](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-gift-card-recipient-fields)"
+              "label": "Zobrazit formulář s informacemi o příjemci u dárkových karet",
+              "info": "Umožňuje kupujícím odeslat dárkové karty v naplánované datum společně s osobní zprávou. [Zjistit více](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-gift-card-recipient-fields)"
             }
           }
         },
@@ -1802,15 +1841,6 @@
             },
             "page": {
               "label": "Stránka"
-            }
-          }
-        },
-        "custom_liquid": {
-          "name": "Vlastní kód Liquidu",
-          "settings": {
-            "custom_liquid": {
-              "label": "Vlastní kód Liquidu",
-              "info": "Přidejte fragmenty aplikací nebo jiný kód Liquidu a vytvořte pokročilá přizpůsobení."
             }
           }
         },
@@ -2488,14 +2518,6 @@
             }
           }
         },
-        "custom_liquid": {
-          "name": "Vlastní kód Liquidu",
-          "settings": {
-            "custom_liquid": {
-              "label": "Vlastní kód Liquidu"
-            }
-          }
-        },
         "rating": {
           "name": "Hodnocení produktů",
           "settings": {
@@ -2648,6 +2670,9 @@
         },
         "header": {
           "content": "Mobilní rozvržení"
+        },
+        "color_scheme": {
+          "info": "Zobrazuje se v případě, že se zobrazuje kontejner."
         }
       },
       "blocks": {
@@ -3283,6 +3308,20 @@
       },
       "presets": {
         "name": "Více řádků"
+      }
+    },
+    "quick-order-list": {
+      "name": "Seznam pro rychlé objednávky",
+      "settings": {
+        "show_image": {
+          "label": "Zobrazit obrázky"
+        },
+        "show_sku": {
+          "label": "Zobrazit SKU"
+        }
+      },
+      "presets": {
+        "name": "Seznam pro rychlé objednávky"
       }
     }
   }

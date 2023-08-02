@@ -24,7 +24,11 @@
       endif
     -%}
 
-    <product-form class="product-form" data-hide-errors="{{ gift_card_recipient_feature_active }}">
+    <product-form
+      class="product-form"
+      data-hide-errors="{{ gift_card_recipient_feature_active }}"
+      data-section-id="{{ section.id }}"
+    >
       <div class="product-form__error-message-wrapper" role="alert" hidden>
         <svg
           aria-hidden="true"
