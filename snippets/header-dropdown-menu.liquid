@@ -7,12 +7,22 @@
 
 <nav class="header__inline-menu">
   <ul class="list-menu list-menu--inline" role="list">
-     {%- if customer.metafields.sparklayer.authentication -%}
-      {% assign menu = linklists.b2b-menu %}
-      {%- else -%}
-      {% assign menu = linklists[section.settings.menu] %}
-      {%- endif -%}
-      {%- for link in menu.links -%}
+         {% assign showB2BNav = false %}
+      {%- if showB2BNav == true -%}
+
+        {%- if customer.metafields.sparklayer.authentication -%}
+          {% assign menu = linklists.b2b-menu %}
+        {%- else -%}
+          {% assign menu = linklists[section.settings.menu] %}
+          
+        {%- endif -%}
+
+    {%- else -%}
+
+    {% assign menu = linklists[section.settings.menu] %}
+    {%- endif -%}
+
+    {%- for link in menu.links -%}
       <li>
         {%- if link.links != blank -%}
           <header-menu>
