@@ -21,22 +21,23 @@
         <div class="menu-drawer__navigation-container">
           <nav class="menu-drawer__navigation">
             <ul class="menu-drawer__menu has-submenu list-menu" role="list">
-                  {% assign showB2BNav = false %}
-      {%- if showB2BNav == true -%}
+              {% assign showB2BNav = false %}
+              
+              {%- if showB2BNav == true -%}
 
-        {%- if customer.metafields.sparklayer.authentication -%}
-          {% assign menu = linklists.b2b-menu %}
-        {%- else -%}
-          {% assign menu = linklists[section.settings.menu] %}
-          
-        {%- endif -%}
+                {%- if customer.metafields.sparklayer.authentication -%}
+                  {% assign menu = linklists.b2b-menu | default: linklists[section.settings.menu] %}
+                {%- else -%}
+                  {% assign menu = linklists[section.settings.menu] %}
+                {%- endif -%}
 
-    {%- else -%}
+              {%- else -%}
+  
+                {% assign menu = linklists[section.settings.menu] %}
 
-    {% assign menu = linklists[section.settings.menu] %}
-    {%- endif -%}
+              {%- endif -%}
 
-    {%- for link in menu.links -%}
+            {%- for link in menu.links -%}
                 <li>
                   {%- if link.links != blank -%}
                     <details id="Details-menu-drawer-menu-item-{{ forloop.index }}">
