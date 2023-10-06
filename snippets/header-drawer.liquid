@@ -37,7 +37,7 @@
 
               {%- endif -%}
 
-            {%- for link in menu -%}
+            {%- for link in menu.links -%}
                 <li>
                   {%- if link.links != blank -%}
                     <details id="Details-menu-drawer-menu-item-{{ forloop.index }}">
