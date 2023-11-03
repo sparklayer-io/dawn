@@ -1,13 +1,16 @@
 {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
 {%- if predictive_search.performed -%}
-{% assign first_column_results_size = predictive_search.resources.queries.size
-| plus: predictive_search.resources.collections.size
-| plus: predictive_search.resources.pages.size
-| plus: predictive_search.resources.articles.size
-%}
+  {% assign first_column_results_size = predictive_search.resources.queries.size
+    | plus: predictive_search.resources.collections.size
+    | plus: predictive_search.resources.pages.size
+    | plus: predictive_search.resources.articles.size
+  %}
   <div id="predictive-search-results" role="listbox">
     {%- if first_column_results_size > 0 or predictive_search.resources.products.size > 0 -%}
-      <div id="predictive-search-results-groups-wrapper" class="predictive-search__results-groups-wrapper{% unless predictive_search.resources.products.size > 0 %} predictive-search__results-groups-wrapper--no-products{% endunless %}{% unless predictive_search.resources.queries.size > 0 or predictive_search.resources.collections.size > 0 %} predictive-search__results-groups-wrapper--no-suggestions{% endunless %}">
+      <div
+        id="predictive-search-results-groups-wrapper"
+        class="predictive-search__results-groups-wrapper{% unless predictive_search.resources.products.size > 0 %} predictive-search__results-groups-wrapper--no-products{% endunless %}{% unless predictive_search.resources.queries.size > 0 or predictive_search.resources.collections.size > 0 %} predictive-search__results-groups-wrapper--no-suggestions{% endunless %}"
+      >
     {%- endif -%}
       {%- if first_column_results_size > 0 -%}
         <div class="predictive-search__result-group">
@@ -163,17 +166,7 @@
       </div>
     {%- endif -%}
 
-    <div class="predictive-search__loading-state" aria-hidden="true">
-      <svg
-        aria-hidden="true"
-        focusable="false"
-        class="spinner"
-        viewBox="0 0 66 66"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
-      </svg>
-    </div>
+    {%- render 'loading-spinner', class: 'predictive-search__loading-state' -%}
 
     <div id="predictive-search-option-search-keywords" class="predictive-search__search-for-button">
       <button
@@ -182,7 +175,9 @@
         role="option"
         aria-selected="false"
       >
-        <span data-predictive-search-search-for-text>{{ 'templates.search.search_for' | t: terms: predictive_search.terms }}</span>
+        <span data-predictive-search-search-for-text>
+          {{- 'templates.search.search_for' | t: terms: predictive_search.terms -}}
+        </span>
         {% render 'icon-arrow' %}
       </button>
     </div>
