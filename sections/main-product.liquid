@@ -122,7 +122,7 @@
               <spark-pdp parent-id="{{ product.id }}"></spark-pdp> 
             {%- when 'price' -%}
               {%- if hidePricesLoggedOut == false or customer.tags contains 'b2b' -%}
-                <div data-spark-"b2c-only" class="no-js-hidden" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+                <div data-spark="b2c-only" class="no-js-hidden" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                   {%- render 'price',
                     product: product,
                     use_variant: true,
