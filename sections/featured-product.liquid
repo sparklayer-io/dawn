@@ -167,7 +167,8 @@
                   {%- endif -%}
                 </h2>
               {%- when 'price' -%}
-                <div class="no-js-hidden" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+              <spark-pdp parent-id="{{ product.id }}"></spark-pdp>
+                <div data-spark="b2c-only" class="no-js-hidden" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                   {%- render 'price',
                     product: product,
                     use_variant: true,
@@ -176,12 +177,12 @@
                   -%}
                 </div>
                 {%- if product.quantity_price_breaks_configured? -%}
-                  <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
+                  <div <spark-pdp parent-id="{{ product.id }}"></spark-pdp> class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>
                   </div>
                 {%- endif -%}
                 {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
-                  <div class="product__tax caption rte">
+                  <div data-spark="b2c-only" class="product__tax caption rte">
                     {%- if cart.taxes_included -%}
                       {{ 'products.product.include_taxes' | t }}
                     {%- endif -%}
@@ -200,6 +201,7 @@
                 {%- endif -%}
               {%- when 'sku' -%}
                 <p
+              data-spark="b2c-only"
                   class="product__sku no-js-hidden{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.sku.size == 0 %} visibility-hidden{% endif %}"
                   id="Sku-{{ section.id }}"
                   role="status"
@@ -210,6 +212,7 @@
                 </p>
               {%- when 'quantity_selector' -%}
                 <div
+              data-spark="b2c-only"
                   id="Quantity-Form-{{ section.id }}"
                   class="product-form__input product-form__quantity{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} product-form__quantity-top{% endif %}"
                   {{ block.shopify_attributes }}
@@ -444,19 +447,23 @@
                 {% assign share_url = product.selected_variant.url | default: product.url | prepend: request.origin %}
                 {% render 'share-button', block: block, share_link: share_url %}
               {%- when 'variant_picker' -%}
+              <div data-spark="b2c-only">
                 {% render 'product-variant-picker',
                   product: product,
                   block: block,
                   product_form_id: product_form_id,
                   update_url: false
                 %}
+              </div>
               {%- when 'buy_buttons' -%}
+              <div data-spark="b2c-only">
                 {%- render 'buy-buttons',
                   block: block,
                   product: product,
                   product_form_id: product_form_id,
                   section_id: section.id
                 -%}
+              </div>
               {%- when 'custom_liquid' -%}
                 {{ block.settings.custom_liquid }}
               {%- when 'rating' -%}
