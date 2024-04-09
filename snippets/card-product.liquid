@@ -206,7 +206,7 @@
               {% assign hidePricesLoggedOut = false %}
               {%- if hidePricesLoggedOut == true -%}
                 <div style="font-size: 14px; position: relative; z-index: 10">
-                  Please <a href="/account" style="color: #000; text-decoration: underline">sign in</a>  to see  pricing
+                  Please <a href="{{ routes.root_url }}/account" style="color: #000; text-decoration: underline">sign in</a>  to see  pricing
                 </div>
               {%- else -%}
                 {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
