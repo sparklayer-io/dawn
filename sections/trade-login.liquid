@@ -206,7 +206,7 @@
 
         <div class="b2b-faqs" id="faqs">
           <h3>{{ section.settings.faq_title }}</h3>
-          {% for block in section.blocks limit: 5 %}
+          {% for block in section.blocks limit: 50 %}
             <div class="faq-tab">
               <a class="item-accordion">
                 {{ block.settings.block_title }}
