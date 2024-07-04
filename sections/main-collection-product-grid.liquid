@@ -17,9 +17,9 @@
 
 {%- if section.settings.quick_add == 'bulk' -%}
   <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {%- style -%}
@@ -150,6 +150,7 @@
                 {% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %}
               "
             >
+              {% assign skip_card_product_styles = false %}
               {%- for product in collection.products -%}
                 {% assign lazy_load = false %}
                 {%- if forloop.index > 2 -%}
@@ -168,9 +169,11 @@
                         show_vendor: section.settings.show_vendor,
                         show_rating: section.settings.show_rating,
                         lazy_load: lazy_load,
+                        skip_styles: skip_card_product_styles,
                         show_quick_add: section.settings.enable_quick_add,
                         section_id: section.id
                       %}
+                      {%- assign skip_card_product_styles = true -%}
                     </li>
                   {% else %}
                     <!-- Don't show anything for logged out customers-->
@@ -191,11 +194,14 @@
                       show_vendor: section.settings.show_vendor,
                       show_rating: section.settings.show_rating,
                       lazy_load: lazy_load,
+                      skip_styles: skip_card_product_styles,
                       show_quick_add: section.settings.enable_quick_add,
                       section_id: section.id
                     %}
+                    {%- assign skip_card_product_styles = true -%}
                   </li>
                 {% endif %}
+
               {%- endfor -%}
             </ul>
 

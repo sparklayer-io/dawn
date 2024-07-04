@@ -11,10 +11,13 @@
   {%- endif -%}
 {% endif %}
 
-<section
+<product-info
   id="MainProduct-{{ section.id }}"
   class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
   data-section="{{ section.id }}"
+  data-product-id="{{ product.id }}"
+  data-update-url="true"
+  data-url="{{ product.url }}"
 >
   {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
   {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
@@ -22,6 +25,7 @@
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
     {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
@@ -85,10 +89,8 @@
         {% render 'product-media-gallery', variant_images: variant_images %}
       </div>
       <div style="z-index: 2" class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-        <product-info
+        <section
           id="ProductInfo-{{ section.id }}"
-          data-section="{{ section.id }}"
-          data-url="{{ product.url }}"
           class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
@@ -139,14 +141,19 @@
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>
                   </div>
                 {%- endif -%}
-                <div data-spark="b2c-only" class="product__tax caption rte">
-                  {%- if cart.taxes_included -%}
-                    {{ 'products.product.include_taxes' | t }}
-                  {%- endif -%}
-                  {%- if shop.shipping_policy.body != blank -%}
-                    {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
-                  {%- endif -%}
-                </div>
+                {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
+                  <div data-spark="b2c-only" class="product__tax caption rte">
+                    {%- if cart.duties_included and cart.taxes_included -%}
+                      {{ 'products.product.duties_and_taxes_included' | t }}
+                    {%- elsif cart.taxes_included -%}
+                      {{ 'products.product.taxes_included' | t }}
+                    {%- elsif cart.duties_included -%}
+                      {{ 'products.product.duties_included' | t }}
+                    {%- endif -%}
+                    {%- if shop.shipping_policy.body != blank -%}
+                      {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                    {%- endif -%}
+                  </div>
                 {%- endif -%}
                 <div {{ block.shopify_attributes }}>
                   {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
@@ -481,50 +488,57 @@
                   render 'share-button', block: block, share_link: share_url
                 %}
 
-            {%- when 'variant_picker' -%}
-              {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
-            {%- when 'buy_buttons' -%}
-              {%- if hidePricesLoggedOut == false or customer.tags contains 'b2b' -%}
-                {%- render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true -%}
-              {%- endif -%}
-            {%- when 'rating' -%}
-              {%- if product.metafields.reviews.rating.value != blank -%}
-                {% liquid
-                  assign rating_decimal = 0
-                  assign decimal = product.metafields.reviews.rating.value.rating | modulo: 1
-                  if decimal >= 0.3 and decimal <= 0.7
-                    assign rating_decimal = 0.5
-                  elsif decimal > 0.7
-                    assign rating_decimal = 1
-                  endif
-                %}
-                <div
-                  class="rating"
-                  role="img"
-                  aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: product.metafields.reviews.rating.value, rating_max: product.metafields.reviews.rating.value.scale_max }}"
+                  {%- when 'variant_picker' -%}
+                    {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+                  {%- when 'buy_buttons' -%}
+                    {%- if hidePricesLoggedOut == false or customer.tags contains 'b2b' -%}
+                      {%- render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true -%}
+                    {%- endif -%}
+                  {%- when 'rating' -%}
+                    {%- if product.metafields.reviews.rating.value != blank -%}
+                      <div class="rating-wrapper">
+                        {% liquid
+                          assign rating_decimal = 0
+                          assign decimal = product.metafields.reviews.rating.value.rating | modulo: 1
+                          if decimal >= 0.3 and decimal <= 0.7
+                            assign rating_decimal = 0.5
+                          elsif decimal > 0.7
+                            assign rating_decimal = 1
+                          endif
+                        %}
+                        <div
+                          class="rating"
+                          role="img"
+                          aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: product.metafields.reviews.rating.value, rating_max: product.metafields.reviews.rating.value.scale_max }}"
+                        >
+                          <span
+                            aria-hidden="true"
+                            class="rating-star"
+                            style="--rating: {{ product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"
+                          ></span>
+                        </div>
+                        <p class="rating-text caption">
+                          <span aria-hidden="true">
+                            {{- product.metafields.reviews.rating.value }} /
+                            {{ product.metafields.reviews.rating.value.scale_max -}}
+                          </span>
+                        </p>
+                        <p class="rating-count caption">
+                          <span aria-hidden="true">({{ product.metafields.reviews.rating_count }})</span>
+                          <span class="visually-hidden">
+                            {{- product.metafields.reviews.rating_count }}
+                            {{ 'accessibility.total_reviews' | t -}}
+                          </span>
+                        </p>
+                      </div>
+                    {%- endif -%}
+              {%- when 'complementary' -%}
+                <product-recommendations
+                  class="complementary-products quick-add-hidden{% if block.settings.make_collapsible_row %} is-accordion{% endif %}{% if block.settings.enable_quick_add %} complementary-products-contains-quick-add{% endif %}"
+                  data-url="{{ routes.product_recommendations_url }}?limit={{ block.settings.product_list_limit }}&intent=complementary"
+                  data-section-id="{{ section.id }}"
+                  data-product-id="{{ product.id }}"
                 >
-                  <span
-                    aria-hidden="true"
-                    class="rating-star"
-                    style="--rating: {{ product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"
-                  ></span>
-                </div>
-                <p class="rating-text caption">
-                  <span aria-hidden="true">
-                    {{- product.metafields.reviews.rating.value }} /
-                    {{ product.metafields.reviews.rating.value.scale_max -}}
-                  </span>
-                </p>
-                <p class="rating-count caption">
-                  <span aria-hidden="true">({{ product.metafields.reviews.rating_count }})</span>
-                  <span class="visually-hidden">
-                    {{- product.metafields.reviews.rating_count }}
-                    {{ 'accessibility.total_reviews' | t -}}
-                  </span>
-                </p>
-              {%- endif -%}
-            {%- when 'complementary' -%}
-              <product-recommendations class="complementary-products quick-add-hidden no-js-hidden{% if block.settings.make_collapsible_row %} is-accordion{% endif %}{% if block.settings.enable_quick_add %} complementary-products-contains-quick-add{% endif %}" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ block.settings.product_list_limit }}&intent=complementary">
                 {%- if recommendations.performed and recommendations.products_count > 0 -%}
                   <aside aria-label="{{ 'accessibility.complementary_products' | t }}" {{ block.shopify_attributes }}{% if block.settings.make_collapsible_row %} class="product__accordion accordion"{% endif %}>
                     <div class="complementary-products__container">
@@ -558,6 +572,7 @@
                               aria-label="{{ 'general.slider.name' | t }}"
                             {% endif %}
                           >
+                            {% assign skip_card_product_styles = false %}
                             {%- for i in (1..number_of_slides) -%}
                               <div
                                 id="Slide-{{ block.id }}-{{ forloop.index }}"
@@ -576,21 +591,23 @@
                                   -%}
                                     <li>
                                       {%- if block.settings.enable_quick_add -%}
-                                        {% assign quick_add = "standard" %}
+                                        {% assign quick_add = 'standard' %}
                                       {%- else -%}
-                                        {% assign quick_add = "none" %}
+                                        {% assign quick_add = 'none' %}
                                       {%- endif -%}
                                       {% render 'card-product',
                                         card_product: product,
                                         media_aspect_ratio: block.settings.image_ratio,
                                         show_secondary_image: false,
                                         lazy_load: false,
+                                        skip_styles: skip_card_product_styles,
                                         quick_add: quick_add,
                                         section_id: section.id,
                                         horizontal_class: true,
                                         horizontal_quick_add: true
                                       %}
                                     </li>
+                                    {%- assign skip_card_product_styles = true -%}
                                   {%- endfor -%}
                                 </ul>
                               </div>
@@ -653,7 +670,7 @@
                     {{ 'quick-add.css' | asset_url | stylesheet_tag }}
                     <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
                   {%- endif -%}
-                </product-recommendations>
+                </>
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
             {%- endcase -%}
@@ -662,7 +679,7 @@
             {{ 'products.product.view_full_details' | t }}
             {% render 'icon-arrow' %}
           </a>
-        </product-info>
+        </section>
       </div>
     </div>
 
@@ -715,51 +732,10 @@
     -%}
 
     <script type="application/ld+json">
-      {
-        "@context": "http://schema.org/",
-        "@type": "Product",
-        "name": {{ product.title | json }},
-        "url": {{ request.origin | append: product.url | json }},
-        {% if seo_media -%}
-          "image": [
-            {{ seo_media | image_url: width: 1920 | prepend: "https:" | json }}
-          ],
-        {%- endif %}
-        "description": {{ product.description | strip_html | json }},
-        {% if product.selected_or_first_available_variant.sku != blank -%}
-          "sku": {{ product.selected_or_first_available_variant.sku | json }},
-        {%- endif %}
-        "brand": {
-          "@type": "Brand",
-          "name": {{ product.vendor | json }}
-        },
-        "offers": [
-          {%- for variant in product.variants -%}
-            {
-              "@type" : "Offer",
-              {%- if variant.sku != blank -%}
-                "sku": {{ variant.sku | json }},
-              {%- endif -%}
-              {%- if variant.barcode.size == 12 -%}
-                "gtin12": {{ variant.barcode }},
-              {%- endif -%}
-              {%- if variant.barcode.size == 13 -%}
-                "gtin13": {{ variant.barcode }},
-              {%- endif -%}
-              {%- if variant.barcode.size == 14 -%}
-                "gtin14": {{ variant.barcode }},
-              {%- endif -%}
-              "availability" : "http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
-              "price" : {{ variant.price | divided_by: 100.00 | json }},
-              "priceCurrency" : {{ cart.currency.iso_code | json }},
-              "url" : {{ request.origin | append: variant.url | json }}
-            }{% unless forloop.last %},{% endunless %}
-          {%- endfor -%}
-        ]
-      }
+      {{ product | structured_data }}
     </script>
   </div>
-</section>
+</product-info>
 
 {% schema %}
 {
@@ -777,7 +753,7 @@
         {
           "type": "inline_richtext",
           "id": "text",
-          "default": "Text block",
+          "default": "t:sections.main-product.blocks.text.settings.text.default",
           "label": "t:sections.main-product.blocks.text.settings.text.label"
         },
         {
@@ -966,7 +942,7 @@
           "type": "text",
           "id": "share_label",
           "label": "t:sections.main-product.blocks.share.settings.text.label",
-          "default": "Share"
+          "default": "t:sections.main-product.blocks.share.settings.text.default"
         },
         {
           "type": "paragraph",
@@ -997,7 +973,7 @@
         {
           "type": "text",
           "id": "heading",
-          "default": "Collapsible row",
+          "default": "t:sections.main-product.blocks.collapsible_tab.settings.heading.default",
           "info": "t:sections.main-product.blocks.collapsible_tab.settings.heading.info",
           "label": "t:sections.main-product.blocks.collapsible_tab.settings.heading.label"
         },
@@ -1204,7 +1180,7 @@
         {
           "type": "text",
           "id": "text",
-          "default": "Pop-up link text",
+          "default": "t:sections.main-product.blocks.popup.settings.link_label.default",
           "label": "t:sections.main-product.blocks.popup.settings.link_label.label"
         },
         {
@@ -1237,7 +1213,7 @@
         {
           "type": "text",
           "id": "block_heading",
-          "default": "Pairs well with",
+          "default": "t:sections.main-product.blocks.complementary_products.settings.heading.default",
           "label": "t:sections.main-product.blocks.complementary_products.settings.heading.label"
         },
         {
@@ -1714,7 +1690,7 @@
         {
           "type": "inline_richtext",
           "id": "heading_1",
-          "default": "Heading",
+          "default": "t:sections.main-product.blocks.icon_with_text.settings.heading_1.default",
           "label": "t:sections.main-product.blocks.icon_with_text.settings.heading_1.label",
           "info": "t:sections.main-product.blocks.icon_with_text.settings.heading.info"
         },
@@ -1910,7 +1886,7 @@
         {
           "type": "inline_richtext",
           "id": "heading_2",
-          "default": "Heading",
+          "default": "t:sections.main-product.blocks.icon_with_text.settings.heading_2.default",
           "label": "t:sections.main-product.blocks.icon_with_text.settings.heading_2.label",
           "info": "t:sections.main-product.blocks.icon_with_text.settings.heading.info"
         },
@@ -2106,7 +2082,7 @@
         {
           "type": "inline_richtext",
           "id": "heading_3",
-          "default": "Heading",
+          "default": "t:sections.main-product.blocks.icon_with_text.settings.heading_3.default",
           "label": "t:sections.main-product.blocks.icon_with_text.settings.heading_3.label",
           "info": "t:sections.main-product.blocks.icon_with_text.settings.heading.info"
         }
