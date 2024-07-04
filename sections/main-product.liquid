@@ -162,6 +162,7 @@
                     {{ form | payment_terms }}
                   {%- endform -%}
                 </div>
+              {%- endif -%}
               {%- when 'inventory' -%}
                 <p
                   data-spark="b2c-only"
@@ -670,7 +671,7 @@
                     {{ 'quick-add.css' | asset_url | stylesheet_tag }}
                     <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
                   {%- endif -%}
-                </>
+                  </product-recommendations>
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
             {%- endcase -%}
@@ -683,7 +684,7 @@
       </div>
     </div>
 
-    {% render 'product-media-modal', variant_images: variant_images %}
+    {% render 'product-media-modal', variant_images: variant_i:mages %}
 
     {% assign popups = section.blocks | where: 'type', 'popup' %}
     {%- for block in popups -%}
