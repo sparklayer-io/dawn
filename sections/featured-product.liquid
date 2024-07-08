@@ -1,39 +1,48 @@
-{{ 'section-main-product.css' | asset_url | stylesheet_tag }}
-{{ 'section-featured-product.css' | asset_url | stylesheet_tag }}
-{{ 'component-accordion.css' | asset_url | stylesheet_tag }}
-{{ 'component-price.css' | asset_url | stylesheet_tag }}
-{{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
-{{ 'component-rating.css' | asset_url | stylesheet_tag }}
-{{ 'component-volume-pricing.css' | asset_url | stylesheet_tag }}
-{% unless section.settings.product.has_only_default_variant %}
-  {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
-  {{ 'component-swatch.css' | asset_url | stylesheet_tag }}
-  {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
-{% endunless %}
-
-{%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
-
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-{%- endstyle -%}
-
-<script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
-
 {%- liquid
   assign product = section.settings.product
 -%}
 
-{% comment %} TODO: assign `product.selected_or_first_available_variant` to variable and replace usage to reduce verbosity {% endcomment %}
+<product-info
+  data-section="{{ section.id }}"
+  data-product-id="{{ product.id }}"
+  data-update-url="false"
+  data-url="{{ product.url }}"
+  {% if section.settings.image_zoom == 'hover' %}
+    data-zoom-on-hover
+  {% endif %}
+>
+  {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+  {{ 'section-featured-product.css' | asset_url | stylesheet_tag }}
+  {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+  {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+  {{ 'component-rating.css' | asset_url | stylesheet_tag }}
+  {{ 'component-volume-pricing.css' | asset_url | stylesheet_tag }}
+  {% unless section.settings.product.has_only_default_variant %}
+    {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
+    {{ 'component-swatch.css' | asset_url | stylesheet_tag }}
+    {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
+  {% endunless %}
+
+  {%- style -%}
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    }
+
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+  {%- endstyle -%}
+
+  <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+
+  {% comment %} TODO: assign `product.selected_or_first_available_variant` to variable and replace usage to reduce verbosity {% endcomment %}
 
 {%- assign first_3d_model = product.media | where: 'media_type', 'model' | first -%}
 {%- if first_3d_model -%}
@@ -74,7 +83,7 @@
         {%- endif -%}
       </div>
       <div class="product__info-wrapper grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-        <product-info
+        <section
           id="ProductInfo-{{ section.id }}"
           class="product__info-container"
           data-section="{{ section.id }}"
@@ -116,10 +125,14 @@
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>
                   </div>
                 {%- endif -%}
-                {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
+                {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
                   <div data-spark="b2c-only" class="product__tax caption rte">
-                    {%- if cart.taxes_included -%}
-                      {{ 'products.product.include_taxes' | t }}
+                    {%- if cart.duties_included and cart.taxes_included -%}
+                      {{ 'products.product.duties_and_taxes_included' | t }}
+                    {%- elsif cart.taxes_included -%}
+                      {{ 'products.product.taxes_included' | t }}
+                    {%- elsif cart.duties_included -%}
+                      {{ 'products.product.duties_included' | t }}
                     {%- endif -%}
                     {%- if shop.shipping_policy.body != blank -%}
                       {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
@@ -366,8 +379,7 @@
                 {% render 'product-variant-picker',
                   product: product,
                   block: block,
-                  product_form_id: product_form_id,
-                  update_url: false
+                  product_form_id: product_form_id
                 %}
               </div>
               {%- when 'buy_buttons' -%}
@@ -434,7 +446,7 @@
             {{ 'products.product.view_full_details' | t }}
             {% render 'icon-arrow' %}
           </a>
-        </product-info>
+        </section>
       </div>
     </div>
     {% render 'product-media-modal', product: product, variant_images: variant_images %}
@@ -465,54 +477,14 @@
 -%}
 
 <script type="application/ld+json">
-  {
-    "@context": "http://schema.org/",
-    "@type": "Product",
-    "name": {{ product.title | json }},
-    "url": {{ request.origin | append: product.url | json }},
-    {% if seo_media -%}
-      "image": [
-        {{ seo_media | image_url: width: 1920 | prepend: "https:" | json }}
-      ],
-    {%- endif %}
-    "description": {{ product.description | strip_html | json }},
-    {% if product.selected_or_first_available_variant.sku != blank -%}
-      "sku": {{ product.selected_or_first_available_variant.sku | json }},
-    {%- endif %}
-    "brand": {
-      "@type": "Brand",
-      "name": {{ product.vendor | json }}
-    },
-    "offers": [
-      {%- for variant in product.variants -%}
-        {
-          "@type" : "Offer",
-          {%- if variant.sku != blank -%}
-            "sku": {{ variant.sku | json }},
-          {%- endif -%}
-          {%- if variant.barcode.size == 12 -%}
-              "gtin12": {{ variant.barcode | json }},
-          {%- endif -%}
-          {%- if variant.barcode.size == 13 -%}
-            "gtin13": {{ variant.barcode | json }},
-          {%- endif -%}
-          {%- if variant.barcode.size == 14 -%}
-            "gtin14": {{ variant.barcode | json }},
-          {%- endif -%}
-          "availability" : "http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
-          "price" : {{ variant.price | divided_by: 100.00 | json }},
-          "priceCurrency" : {{ cart.currency.iso_code | json }},
-          "url" : {{ request.origin | append: variant.url | json }}
-        }{% unless forloop.last %},{% endunless %}
-      {%- endfor -%}
-    ]
-  }
+  {{ product | structured_data }}
 </script>
 
 {% if product.media.size > 0 %}
   <script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'media-gallery.js' | asset_url }}" defer="defer"></script>
 {% endif %}
+</product-info>
 
 {% schema %}
 {
@@ -536,7 +508,7 @@
         {
           "type": "inline_richtext",
           "id": "text",
-          "default": "Text block",
+          "default": "t:sections.featured-product.blocks.text.settings.text.default",
           "label": "t:sections.featured-product.blocks.text.settings.text.label"
         },
         {
@@ -581,6 +553,14 @@
             {
               "value": "h0",
               "label": "t:sections.all.heading_size.options__3.label"
+            },
+            {
+              "value": "hxl",
+              "label": "t:sections.all.heading_size.options__4.label"
+            },
+            {
+              "value": "hxxl",
+              "label": "t:sections.all.heading_size.options__5.label"
             }
           ],
           "default": "h1",
@@ -699,7 +679,7 @@
           "type": "text",
           "id": "share_label",
           "label": "t:sections.featured-product.blocks.share.settings.text.label",
-          "default": "Share"
+          "default": "t:sections.featured-product.blocks.share.settings.text.default"
         },
         {
           "type": "paragraph",
@@ -951,7 +931,7 @@
         {
           "type": "inline_richtext",
           "id": "heading_1",
-          "default": "Heading",
+          "default": "t:sections.main-product.blocks.icon_with_text.settings.heading_1.default",
           "label": "t:sections.main-product.blocks.icon_with_text.settings.heading_1.label",
           "info": "t:sections.main-product.blocks.icon_with_text.settings.heading.info"
         },
@@ -1147,7 +1127,7 @@
         {
           "type": "inline_richtext",
           "id": "heading_2",
-          "default": "Heading",
+          "default": "t:sections.main-product.blocks.icon_with_text.settings.heading_2.default",
           "label": "t:sections.main-product.blocks.icon_with_text.settings.heading_2.label",
           "info": "t:sections.main-product.blocks.icon_with_text.settings.heading.info"
         },
@@ -1343,7 +1323,7 @@
         {
           "type": "inline_richtext",
           "id": "heading_3",
-          "default": "Heading",
+          "default": "t:sections.main-product.blocks.icon_with_text.settings.heading_3.default",
           "label": "t:sections.main-product.blocks.icon_with_text.settings.heading_3.label",
           "info": "t:sections.main-product.blocks.icon_with_text.settings.heading.info"
         }
