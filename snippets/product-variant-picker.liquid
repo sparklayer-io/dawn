@@ -10,6 +10,7 @@
 {% endcomment %}
 {%- unless product.has_only_default_variant -%}
   <variant-selects
+    data-spark="b2c-only"
     id="variant-selects-{{ section.id }}"
     data-section="{{ section.id }}"
     {{ block.shopify_attributes }}
