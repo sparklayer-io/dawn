@@ -395,7 +395,7 @@
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
       {% comment %} Define accessible pages {% endcomment %}
-      {%- if customer.tags contains 'b2b' or template contains 'customers/' or request.path == '/challenge'  or request.path == '/pages/trade-login' -%}
+      {%- if request.design_mode or customer.tags contains 'b2b' or template contains 'customers/' or request.path == '/challenge'  or request.path == '/pages/trade-login' -%}
       {% assign showSiteForB2B = false %}
       {% endif %}
       {%- if showSiteForB2B == blank -%}
