@@ -25,6 +25,11 @@
         {% comment %} 
           Login form
         {% endcomment %}
+
+        
+        {%- if shop.customer_accounts_enabled -%}
+          <a class="button" href="{{ routes.account_login_url }}">{{ 'customer.account.login' | t }}</a>
+        {% else %}
             
         <form method="post" action="/account/login" id="customer_login" accept-charset="UTF-8" novalidate="novalidate"><input type="hidden" name="form_type" value="customer_login">
 
@@ -90,6 +95,7 @@
           </button>
 
         </form>
+        {% endif %}
 
         {% comment %} 
           Apply for an account
