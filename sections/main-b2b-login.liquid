@@ -8,7 +8,9 @@
   *********************
   
   SETUP
-  In your Shopify Admin, go to Online Store > Pages > Add page. Create a new page, under "Search engine listing", set the "URl handle" to "b2b-login". From the "Template" section, choose "b2b-login"
+  Add this code to a new file /sections/b2b-login.liquid
+  Next, add a new page /templates/page.b2b-login.json and add the code from here https://gist.github.com/cm-sl/1c18244e75ed401b217f15eb1c9d6308
+  Next, in your Shopify Admin, go to Online Store > Pages > Add page. Create a new page, under "Search engine listing", set the "URl handle" to "b2b-login". From the "Template" section, choose "b2b-login"
   Once this is done, go to Online Store and click "Customize" on your theme. Search for "b2b-login" and you can then edit how this page works and looks
 
   *********************
@@ -64,53 +66,53 @@ This is the Shopify Liquid code that generates the page layout
             
           {% if section.settings.login_type == 'passwordless' %}
             <a class="b2b-btn b2b-btn-primary" href="{{ routes.account_login_url }}">
-              {{ 'customer.login_page.sign_in' | t }}
+              {{ section.settings.sign_in }}
             </a>
           {% else %}
 
-              <form method="post" action="/account/login" id="customer_login" accept-charset="UTF-8" novalidate>
-                  <input type="hidden" name="form_type" value="customer_login">
-                  <input type="hidden" name="utf8" value="✓">
+            <form method="post" action="/account/login" id="customer_login" accept-charset="UTF-8" novalidate>
+                <input type="hidden" name="form_type" value="customer_login">
+                <input type="hidden" name="utf8" value="✓">
 
-                  <div class="b2b-form-item">
-                      <input
-                          id="CustomerEmail"
-                          type="email"
-                          name="customer[email]"
-                          class="b2b-input"
-                          aria-required="true"
-                          autocorrect="off"
-                          autocapitalize="off"
-                          autocomplete="email"
-                          placeholder="{{ 'customer.login_page.email' | t }}"
-                          required
-                      >
-                  </div>
+                <div class="b2b-form-item">
+                    <input
+                        id="CustomerEmail"
+                        type="email"
+                        name="customer[email]"
+                        class="b2b-input"
+                        aria-required="true"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        autocomplete="email"
+                        placeholder="{{ 'customer.login_page.email' | t }}"
+                        required
+                    >
+                </div>
 
-                  <div class="b2b-form-item">
-                      <input
-                          id="CustomerPassword"
-                          type="password"
-                          name="customer[password]"
-                          class="b2b-input"
-                          aria-required="true"
-                          autocorrect="off"
-                          autocapitalize="off"
-                          autocomplete="current-password"
-                          placeholder="{{ 'customer.login_page.password' | t }}""
-                          required
-                      >
-                      <div class="b2b-form-help">
-                          <a href="/account/login#recover" class="b2b-link-text">
-                            {{ 'customer.login_page.forgot_password' | t }}
-                          </a>
-                      </div>
-                  </div>
+                <div class="b2b-form-item">
+                    <input
+                        id="CustomerPassword"
+                        type="password"
+                        name="customer[password]"
+                        class="b2b-input"
+                        aria-required="true"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        autocomplete="current-password"
+                        placeholder="{{ 'customer.login_page.password' | t }}""
+                        required
+                    >
+                    <div class="b2b-form-help">
+                        <a href="/account/login#recover" class="b2b-link-text">
+                          {{ 'customer.login_page.forgot_password' | t }}
+                        </a>
+                    </div>
+                </div>
 
-                  <button class="b2b-btn b2b-btn-primary">
-                    {{ 'customer.login_page.sign_in' | t }}
-                  </button>
-              </form>
+                <button class="b2b-btn b2b-btn-primary">
+                  {{ 'customer.login_page.sign_in' | t }}
+                </button>
+            </form>
 
             {% endif %}
 
@@ -160,6 +162,7 @@ This is the Shopify Liquid code that generates the page layout
                       <div class="b2b-form-item">
                         <input class="b2b-input" 
                         type="text" 
+                        {% if section.settings.form_email_field1_required %} required {% endif %}
                         id="ContactForm-{{ section.settings.form_email_field1 | replace: ' ', '_' | downcase }}" 
                         name="contact[{{ section.settings.form_email_field1 | replace: ' ', '_' | downcase }}]" 
                         placeholder="{{ section.settings.form_email_field1 }}">
@@ -169,7 +172,8 @@ This is the Shopify Liquid code that generates the page layout
                       {% if section.settings.form_email_field2 != blank %}  
                       <div class="b2b-form-item">
                         <input class="b2b-input" 
-                        type="text" 
+                        type="text"
+                        {% if section.settings.form_email_field2_required %} required {% endif %}
                         id="ContactForm-{{ section.settings.form_email_field2 | replace: ' ', '_' | downcase }}" 
                         name="contact[{{ section.settings.form_email_field2 | replace: ' ', '_' | downcase }}]" 
                         placeholder="{{ section.settings.form_email_field2 }}">                        
@@ -177,40 +181,54 @@ This is the Shopify Liquid code that generates the page layout
                       {% endif %}
                         
                       {% if section.settings.form_email_field3 != blank %}
-                          <div class="b2b-form-item">
-                              <input class="b2b-input" 
-                                     type="text" 
-                                     id="ContactForm-{{ section.settings.form_email_field3 | replace: ' ', '_' | downcase }}" 
-                                     name="contact[{{ section.settings.form_email_field3 | replace: ' ', '_' | downcase }}]" 
-                                     placeholder="{{ section.settings.form_email_field3 }}">                        
-                          </div>
+                        <div class="b2b-form-item">
+                        <input class="b2b-input" 
+                        type="text" 
+                        {% if section.settings.form_email_field3_required %} required {% endif %}
+                        id="ContactForm-{{ section.settings.form_email_field3 | replace: ' ', '_' | downcase }}" 
+                        name="contact[{{ section.settings.form_email_field3 | replace: ' ', '_' | downcase }}]" 
+                        placeholder="{{ section.settings.form_email_field3 }}">                        
+                        </div>
                       {% endif %}
 
                       {% if section.settings.form_email_field4 != blank %}
                       <div class="b2b-form-item">
                         <input class="b2b-input" 
                         type="text" 
+                        {% if section.settings.form_email_field4_required %} required {% endif %}  
                         id="ContactForm-{{ section.settings.form_email_field4 | replace: ' ', '_' | downcase }}" 
                         name="contact[{{ section.settings.form_email_field4 | replace: ' ', '_' | downcase }}]" 
                         placeholder="{{ section.settings.form_email_field4 }}">                        
                       </div>
                       {% endif %}
 
-                      {% for block in form_fields %}
-                          <div class="b2b-form-item">
+                     {% for block in form_fields %}
+                        <div class="b2b-form-item">
                             {% if block.settings.field_type == "hidden" %}
-                                <input type="hidden" id="ContactForm-{{ block.settings.field_name | replace: ' ', '_' | downcase }}" name="contact[{{ block.settings.field_name | replace: ' ', '_' | downcase }}]" value="{{ block.settings.default_value }}">
+                                <input type="hidden" 
+                                       id="ContactForm-{{ block.settings.field_name | replace: ' ', '_' | downcase }}" 
+                                       name="contact[{{ block.settings.field_name | replace: ' ', '_' | downcase }}]" 
+                                       value="{{ block.settings.default_value }}">
                             {% elsif block.settings.field_type == "textarea" %}
-                                <textarea class="b2b-input" id="ContactForm-{{ block.settings.field_name | replace: ' ', '_' | downcase }}" name="contact[{{ block.settings.field_name | replace: ' ', '_' | downcase }}]" placeholder="{{ block.settings.placeholder }}"></textarea>
+                                <textarea class="b2b-input" 
+                                          id="ContactForm-{{ block.settings.field_name | replace: ' ', '_' | downcase }}" 
+                                          name="contact[{{ block.settings.field_name | replace: ' ', '_' | downcase }}]" 
+                                          placeholder="{{ block.settings.placeholder }}"
+                                          {% if block.settings.field_required %} required {% endif %}></textarea>
                             {% else %}
-                                <input class="b2b-input" type="{{ block.settings.field_type }}" name="contact[{{ block.settings.field_name | replace: ' ', '_' | downcase }}]" placeholder="{{ block.settings.placeholder }}">
+                                <input class="b2b-input" 
+                                       type="{{ block.settings.field_type }}" 
+                                       name="contact[{{ block.settings.field_name | replace: ' ', '_' | downcase }}]" 
+                                       placeholder="{{ block.settings.placeholder }}"
+                                       {% if block.settings.field_required %} required {% endif %}>
                             {% endif %}
                         </div>
-                      {% endfor %}
+                    {% endfor %}
 
                       {% if section.settings.form_email_field5 != blank %}   
                       <div class="b2b-form-item">
-                       <textarea class="b2b-input"      
+                       <textarea class="b2b-input"
+                         {% if section.settings.form_email_field5_required %} required {% endif %}  
                          id="ContactForm-{{ section.settings.form_email_field5 | replace: ' ', '_' | downcase }}" 
                          name="contact[{{ section.settings.form_email_field5 | replace: ' ', '_' | downcase }}]" 
                          placeholder="{{ section.settings.form_email_field5 }}"></textarea>
@@ -742,6 +760,33 @@ This is the scheme that controls the content in the Shopify Customizer tool
 "label": "Introduction Text",
 "default": "Sign in below to get instant access to your B2B account and start placing orders."
 },
+
+{
+"type": "text",
+"id": "login_email",
+"label": "Email",
+"default": "Enter your email address"
+},
+
+{
+"type": "text",
+"id": "login_password",
+"label": "Password",
+"default": "Enter your password"
+},
+{
+"type": "text",
+"id": "sign_in",
+"label": "Sign in button",
+"default": "Sign In"
+},
+{
+"type": "text",
+"id": "forgot_password",
+"label": "Forgot password",
+"default": "Forgot password?"
+},
+
 {
 "type": "text",
 "id": "open_account_title",
@@ -831,11 +876,23 @@ This is the scheme that controls the content in the Shopify Customizer tool
 "info": "Leave blank to remove this field"
 },
 {
+"type": "checkbox",
+"id": "form_email_field1_required",
+"label": "Make this field required?",
+"default": false
+},
+{
 "type": "text",
 "id": "form_email_field2",
 "label": "Field 2",
 "default": "Email",
 "info": "Leave blank to remove this field"
+},
+{
+"type": "checkbox",
+"id": "form_email_field2_required",
+"label": "Make this field required?",
+"default": true
 },
 {
 "type": "text",
@@ -845,11 +902,23 @@ This is the scheme that controls the content in the Shopify Customizer tool
 "info": "Leave blank to remove this field"
 },
 {
+"type": "checkbox",
+"id": "form_email_field3_required",
+"label": "Make this field required?",
+"default": false
+},      
+{
 "type": "text",
 "id": "form_email_field4",
 "label": "Field 4",
 "default": "Your Tax ID",
 "info": "Leave blank to remove this field"
+},
+{
+"type": "checkbox",
+"id": "form_email_field4_required",
+"label": "Make this field required?",
+"default": false
 },
 {
 "type": "text",
@@ -858,6 +927,12 @@ This is the scheme that controls the content in the Shopify Customizer tool
 "default": "Comments",
 "info": "This field always shows at the end to allow comments to be added.  Leave blank to remove this field"
 },
+{
+"type": "checkbox",
+"id": "form_email_field5_required",
+"label": "Make this field required?",
+"default": false
+},      
 {
 "type": "header",
 "content": "FAQs",
@@ -1045,6 +1120,13 @@ This is the scheme that controls the content in the Shopify Customizer tool
                   "id": "placeholder",
                   "label": "Placeholder Text",
                   "default": "Enter value"
+              },
+            
+              {
+                  "type": "checkbox",
+                  "id": "field_required",
+                  "label": "Make this field required?",
+                  "default": false
               }
           ]
       }
