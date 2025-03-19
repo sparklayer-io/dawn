@@ -8,9 +8,7 @@
   *********************
   
   SETUP
-  Add this code to a new file /sections/b2b-login.liquid
-  Next, add a new page /templates/page.b2b-login.liquid ensuring it is a liquid page. Add this code {% section 'b2b-login' %}
-  Next, in your Shopify Admin, go to Online Store > Pages > Add page. Create a new page, under "Search engine listing", set the "URl handle" to "b2b-login". From the "Template" section, choose "b2b-login"
+  In your Shopify Admin, go to Online Store > Pages > Add page. Create a new page, under "Search engine listing", set the "URl handle" to "b2b-login". From the "Template" section, choose "b2b-login"
   Once this is done, go to Online Store and click "Customize" on your theme. Search for "b2b-login" and you can then edit how this page works and looks
 
   *********************
@@ -66,7 +64,7 @@ This is the Shopify Liquid code that generates the page layout
             
           {% if section.settings.login_type == 'passwordless' %}
             <a class="b2b-btn b2b-btn-primary" href="{{ routes.account_login_url }}">
-              {{ section.settings.sign_in }}
+              {{ 'customer.login_page.sign_in' | t }}
             </a>
           {% else %}
 
@@ -84,7 +82,7 @@ This is the Shopify Liquid code that generates the page layout
                           autocorrect="off"
                           autocapitalize="off"
                           autocomplete="email"
-                          placeholder="{{ section.settings.login_email }}"
+                          placeholder="{{ 'customer.login_page.email' | t }}"
                           required
                       >
                   </div>
@@ -99,18 +97,18 @@ This is the Shopify Liquid code that generates the page layout
                           autocorrect="off"
                           autocapitalize="off"
                           autocomplete="current-password"
-                          placeholder="{{ section.settings.login_password }}"
+                          placeholder="{{ 'customer.login_page.password' | t }}""
                           required
                       >
                       <div class="b2b-form-help">
                           <a href="/account/login#recover" class="b2b-link-text">
-                            {{ section.settings.forgot_password }}
+                            {{ 'customer.login_page.forgot_password' | t }}
                           </a>
                       </div>
                   </div>
 
                   <button class="b2b-btn b2b-btn-primary">
-                     {{ section.settings.sign_in }}
+                    {{ 'customer.login_page.sign_in' | t }}
                   </button>
               </form>
 
@@ -744,33 +742,6 @@ This is the scheme that controls the content in the Shopify Customizer tool
 "label": "Introduction Text",
 "default": "Sign in below to get instant access to your B2B account and start placing orders."
 },
-
-{
-"type": "text",
-"id": "login_email",
-"label": "Email",
-"default": "Enter your email address"
-},
-
-{
-"type": "text",
-"id": "login_password",
-"label": "Password",
-"default": "Enter your password"
-},
-{
-"type": "text",
-"id": "sign_in",
-"label": "Sign in button",
-"default": "Sign In"
-},
-{
-"type": "text",
-"id": "forgot_password",
-"label": "Forgot password",
-"default": "Forgot password?"
-},
-
 {
 "type": "text",
 "id": "open_account_title",
