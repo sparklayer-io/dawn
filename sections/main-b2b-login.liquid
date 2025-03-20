@@ -1,0 +1,1141 @@
+{% comment %}
+
+  *********************
+
+  DOCUMENTATION
+  You can see how this works in our online guide here https://docs.sparklayer.io/shopify-registration-form
+
+  *********************
+  
+  SETUP
+  Add this code to a new file /sections/b2b-login.liquid
+  Next, add a new page /templates/page.b2b-login.json and add the code from here https://gist.github.com/cm-sl/1c18244e75ed401b217f15eb1c9d6308
+  Next, in your Shopify Admin, go to Online Store > Pages > Add page. Create a new page, under "Search engine listing", set the "URl handle" to "b2b-login". From the "Template" section, choose "b2b-login"
+  Once this is done, go to Online Store and click "Customize" on your theme. Search for "b2b-login" and you can then edit how this page works and looks
+
+  *********************
+  
+  MAKING UPDATES
+  You can edit the source HTML and Liquid code below
+  You can edit the source CSS code below
+  You can configure the Shopify JSON below
+
+  *********************
+
+  OTHER NOTES
+  If you're using Shopify "Customer Accounts", users need to click to sign in. If you're using Shopify "Legacy Accounts", they can sign in with an email and password
+  If a logged in B2B customer visits this page, they'll be redirected back to the homepage. You can edit this by searching for 'window.location.href'
+  
+  *********************
+  
+{% endcomment %}
+
+{%- if customer.tags contains 'b2b' -%}
+  <script>
+      window.location.href = '/index#spark-account';
+  </script>
+{% endif %}
+
+
+{% comment %}
+
+*********************
+
+NOTES
+This is the Shopify Liquid code that generates the page layout
+
+*********************
+
+{% endcomment %}
+
+
+<div class="{% if section.settings.page_width == 'fixed' %}page-width{% endif %} b2b-login">
+  <div class="b2b-login-wrapper">
+      <div class="b2b-intro-image{% if section.settings.background_width == 'cover' %} image-cover{% endif %}" style="background-image: url('{{ section.settings.featured_image.src | img_url: '1000x' }}'); background-color: {{ section.settings.background_color }}; background-repeat: no-repeat;">
+      </div>
+
+      <div class="b2b-login-area" style="background: {{ section.settings.background_color }};">
+          <div class="b2b-header-primary">{{ section.settings.title }}</div>
+
+          <div class="b2b-body-text">
+              <p>{{ section.settings.intro_text }}</p>
+          </div>
+
+          <div class="b2b-form">
+
+            
+          {% if section.settings.login_type == 'passwordless' %}
+            <a class="b2b-btn b2b-btn-primary" href="{{ routes.account_login_url }}">
+              {{ section.settings.sign_in }}
+            </a>
+          {% else %}
+
+            <form method="post" action="/account/login" id="customer_login" accept-charset="UTF-8" novalidate>
+                <input type="hidden" name="form_type" value="customer_login">
+                <input type="hidden" name="utf8" value="✓">
+
+                <div class="b2b-form-item">
+                    <input
+                        id="CustomerEmail"
+                        type="email"
+                        name="customer[email]"
+                        class="b2b-input"
+                        aria-required="true"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        autocomplete="email"
+                        placeholder="{{ 'customer.login_page.email' | t }}"
+                        required
+                    >
+                </div>
+
+                <div class="b2b-form-item">
+                    <input
+                        id="CustomerPassword"
+                        type="password"
+                        name="customer[password]"
+                        class="b2b-input"
+                        aria-required="true"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        autocomplete="current-password"
+                        placeholder="{{ 'customer.login_page.password' | t }}""
+                        required
+                    >
+                    <div class="b2b-form-help">
+                        <a href="/account/login#recover" class="b2b-link-text">
+                          {{ 'customer.login_page.forgot_password' | t }}
+                        </a>
+                    </div>
+                </div>
+
+                <button class="b2b-btn b2b-btn-primary">
+                  {{ 'customer.login_page.sign_in' | t }}
+                </button>
+            </form>
+
+            {% endif %}
+
+              <div class="b2b-apply-account" id="b2b-apply">
+                  <div class="b2b-header-secondary">{{ section.settings.open_account_title }}</div>
+                  <div class="b2b-body-text">
+                    {{ section.settings.open_account_text }}
+                  </div>
+
+                {% if section.settings.form_action == "redirect" %}
+                  <a href="{{ section.settings.redirect_url }}" class="b2b-btn b2b-btn-secondary">
+                      {{ section.settings.open_account_button }}
+                  </a>
+                {% else %}
+
+                  <a href="#b2b-apply" onclick="b2bRegister()" class="b2b-btn b2b-btn-secondary">
+                      {{ section.settings.open_account_button }}
+                  </a>
+
+                  {% if section.settings.form_action == "custom_form" %}
+
+                    <div id="b2b-register" class="b2b-registration-form">
+                        <div class="b2b-application-form-wrapper">
+                            {{ section.settings.custom_form_html }}
+                        </div>
+                    </div>
+                  {% else %}
+                    
+                   {%- form 'contact', id: 'ContactForm' -%}
+                    {%- if form.posted_successfully? -%}
+                      <div class="b2b-form-success b2b-form-message" tabindex="-1" autofocus>                               
+                      {{ section.settings.form_message_success }}
+                      </div>
+                    {%- elsif form.errors -%}
+                      <div class="b2b-form-error b2b-form-message">
+                      {{ section.settings.form_message_error }}
+                      </div>
+                    {%- endif -%}
+                    
+                    <div id="b2b-register" class="b2b-registration-form">
+                      <div class="b2b-contact-fields">
+                        <input class="field__input" type="hidden" id="ContactForm-B2B" name="contact[B2B_Application]" value="{{ section.settings.form_email_subject }}">
+                      
+                      {% assign form_fields = section.blocks | where: "type", "form_field" %}
+
+                      {% if section.settings.form_email_field1 != blank %}  
+                      <div class="b2b-form-item">
+                        <input class="b2b-input" 
+                        type="text" 
+                        {% if section.settings.form_email_field1_required %} required {% endif %}
+                        id="ContactForm-{{ section.settings.form_email_field1 | replace: ' ', '_' | downcase }}" 
+                        name="contact[{{ section.settings.form_email_field1 | replace: ' ', '_' | downcase }}]" 
+                        placeholder="{{ section.settings.form_email_field1 }}">
+                      </div>
+                      {% endif %}
+                        
+                      {% if section.settings.form_email_field2 != blank %}  
+                      <div class="b2b-form-item">
+                        <input class="b2b-input" 
+                        type="text"
+                        {% if section.settings.form_email_field2_required %} required {% endif %}
+                        id="ContactForm-{{ section.settings.form_email_field2 | replace: ' ', '_' | downcase }}" 
+                        name="contact[{{ section.settings.form_email_field2 | replace: ' ', '_' | downcase }}]" 
+                        placeholder="{{ section.settings.form_email_field2 }}">                        
+                      </div>
+                      {% endif %}
+                        
+                      {% if section.settings.form_email_field3 != blank %}
+                        <div class="b2b-form-item">
+                        <input class="b2b-input" 
+                        type="text" 
+                        {% if section.settings.form_email_field3_required %} required {% endif %}
+                        id="ContactForm-{{ section.settings.form_email_field3 | replace: ' ', '_' | downcase }}" 
+                        name="contact[{{ section.settings.form_email_field3 | replace: ' ', '_' | downcase }}]" 
+                        placeholder="{{ section.settings.form_email_field3 }}">                        
+                        </div>
+                      {% endif %}
+
+                      {% if section.settings.form_email_field4 != blank %}
+                      <div class="b2b-form-item">
+                        <input class="b2b-input" 
+                        type="text" 
+                        {% if section.settings.form_email_field4_required %} required {% endif %}  
+                        id="ContactForm-{{ section.settings.form_email_field4 | replace: ' ', '_' | downcase }}" 
+                        name="contact[{{ section.settings.form_email_field4 | replace: ' ', '_' | downcase }}]" 
+                        placeholder="{{ section.settings.form_email_field4 }}">                        
+                      </div>
+                      {% endif %}
+
+                     {% for block in form_fields %}
+                        <div class="b2b-form-item">
+                            {% if block.settings.field_type == "hidden" %}
+                                <input type="hidden" 
+                                       id="ContactForm-{{ block.settings.field_name | replace: ' ', '_' | downcase }}" 
+                                       name="contact[{{ block.settings.field_name | replace: ' ', '_' | downcase }}]" 
+                                       value="{{ block.settings.default_value }}">
+                            {% elsif block.settings.field_type == "textarea" %}
+                                <textarea class="b2b-input" 
+                                          id="ContactForm-{{ block.settings.field_name | replace: ' ', '_' | downcase }}" 
+                                          name="contact[{{ block.settings.field_name | replace: ' ', '_' | downcase }}]" 
+                                          placeholder="{{ block.settings.placeholder }}"
+                                          {% if block.settings.field_required %} required {% endif %}></textarea>
+                            {% else %}
+                                <input class="b2b-input" 
+                                       type="{{ block.settings.field_type }}" 
+                                       name="contact[{{ block.settings.field_name | replace: ' ', '_' | downcase }}]" 
+                                       placeholder="{{ block.settings.placeholder }}"
+                                       {% if block.settings.field_required %} required {% endif %}>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                      {% if section.settings.form_email_field5 != blank %}   
+                      <div class="b2b-form-item">
+                       <textarea class="b2b-input"
+                         {% if section.settings.form_email_field5_required %} required {% endif %}  
+                         id="ContactForm-{{ section.settings.form_email_field5 | replace: ' ', '_' | downcase }}" 
+                         name="contact[{{ section.settings.form_email_field5 | replace: ' ', '_' | downcase }}]" 
+                         placeholder="{{ section.settings.form_email_field5 }}"></textarea>
+                      </div>
+                      {% endif %}
+                        
+            
+                      <button type="submit" class="b2b-btn b2b-btn-primary">
+                          {{ section.settings.apply_submit }}
+                      </button>
+                  </div>
+              </div>
+              {%- endform -%}
+             {% endif %}
+             {% endif %}
+            </div>
+
+              {% if section.settings.show_faqs %}
+                  <div class="b2b-faqs" id="faqs">
+                      <div class="b2b-header-secondary">{{ section.settings.faq_title }}</div>
+                    
+                     {% assign faq_blocks = section.blocks | where: "type", "feature" %}
+
+                      {% for block in faq_blocks %}
+                          <div class="b2b-faq-item">
+                              <div class="b2b-faq-question">
+                                  {{ block.settings.block_title }}
+                                  <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-caret" viewBox="0 0 10 6">
+                                      <path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor"></path>
+                                  </svg>
+                              </div>
+                              <div class="b2b-faq-answer b2b-body-text">{{ block.settings.block_text }}</div>
+                          </div>
+                      {% endfor %}
+
+                  </div>
+              {% endif %}
+            
+          </div>
+      </div>
+  </div>
+</div>
+
+{% comment %}
+
+*********************
+
+NOTES
+This is the CSS that controls the page layout and design
+
+*********************
+
+{% endcomment %}
+
+<style>
+ 
+/* B2B Login Container */
+
+.b2b-login {
+width: 100%;
+}
+
+.b2b-login-wrapper {
+display: flex;
+flex-wrap: wrap;
+}
+
+.b2b-intro-image {
+width: 50%;
+background-size: 100%;
+min-height: 300px;
+}
+
+.b2b-intro-image.image-cover {
+background-size: cover;
+}
+
+.b2b-login-area {
+width: 50%;
+padding: {{ section.settings.base_page_spacing }}px;;
+}
+
+
+/* General styles */
+
+.b2b-header-primary {
+color: {{ section.settings.base_header_primary_color }};
+font-size: {{ section.settings.base_header_primary_font_size }}px;
+line-height: 1.5;
+margin: 0 0 0.25em
+}
+
+.b2b-header-secondary {
+color: {{ section.settings.base_header_secondary_color }};
+font-size: {{ section.settings.base_header_secondary_font_size }}px;
+line-height: 1.5;
+margin: 0 0 0.5em
+}
+
+.b2b-body-text {
+color: {{ section.settings.base_font_color }};
+font-size: {{ section.settings.base_font_size }}px;
+line-height: 1.5
+}
+
+.b2b-body-text p {
+margin: 0 0 1em
+}
+
+.b2b-link-text {
+color: {{ section.settings.base_link_color }};
+text-decoration: none
+}
+
+.b2b-link-text:hover {
+text-decoration: underline
+}
+
+/* Input Fields */
+
+.b2b-input {
+width: 100%;
+padding: 10px;
+border: 1px solid {{ section.settings.input_border_color }};
+background-color: {{ section.settings.input_background }};
+color: {{ section.settings.input_text_color }};
+font-size: {{ section.settings.input_font_size }}px;
+border-radius: {{ section.settings.input_border_radius }}px;
+font-family: inherit;
+transition: all 0.3s;
+display: block;
+margin: 0
+}
+
+.b2b-input:hover {
+border-color: {{ section.settings.input_border_hover_color }};
+
+}
+
+.b2b-input:focus {
+outline: none;
+border-color: {{ section.settings.input_border_hover_color }};
+outline-offset: unset;
+box-shadow: none;
+}
+
+/* Buttons */
+
+.b2b-btn {
+display: inline-block;
+padding: 12px 20px;
+font-size: {{ section.settings.button_font_size }}px;
+border: 1px solid {{ section.settings.button_border_color }};
+border-radius: {{ section.settings.button_border_radius }}px;
+text-align: center;
+cursor: pointer;
+transition: background-color 0.3s ease-in-out;
+font-family: inherit;
+text-decoration: none;
+line-height: 1;
+}
+
+.b2b-btn-primary {
+background-color: {{ section.settings.button_color }};
+color: {{ section.settings.button_font_color }};
+}
+
+.b2b-btn-primary:hover {
+background-color: {{ section.settings.button_hover_color }};
+}
+
+.b2b-btn-secondary {
+background-color: {{ section.settings.button_secondary_color }};
+color: {{ section.settings.button_secondary_font_color }};
+border: 1px solid {{ section.settings.button_secondary_border_color }};
+}
+
+.b2b-btn-secondary:hover {
+background-color: {{ section.settings.button_secondary_hover_color }};
+}
+
+/* Messages */
+
+.b2b-form-message {
+line-height: 1.4;
+font-size: 14px;
+margin: 1em 0 0;
+border-radius: 4px;
+text-align: center;
+padding: 10px;
+}
+.b2b-form-success {
+border: 1px solid #00A372;
+background: #e5fff5;
+color: #00a372;
+}
+
+.b2b-form-error {
+border: 1px solid red;
+background: red;
+color: white;
+}
+
+/* Login fields */
+
+.b2b-form-help {
+margin: 0.5em 0 0;
+font-size: {{ section.settings.base_font_size }}px;
+text-align: left;
+}
+.b2b-form-item {
+margin-bottom: 0.75em;
+}
+
+/* Apply for an account */
+
+.b2b-apply-account {
+margin: 2em 0 0
+}
+
+.b2b-contact-fields {
+margin: 1em 0 0
+}
+
+/* FAQs */
+
+.b2b-faqs {
+margin-top: 3rem;
+padding-top: 3rem;
+border-top: 1px solid #ccc;
+}
+
+.b2b-faqs .b2b-header-secondary {
+margin: 0 0 1em
+}
+
+.b2b-faq-item {
+margin-bottom: 1rem;
+}
+
+.b2b-faq-question {
+display: block;
+padding: 0.75em 1em;
+background: #fff;
+cursor: pointer;
+position: relative;
+font-size: {{ section.settings.base_font_size }}px;
+}
+
+.b2b-faq-question svg {
+width: 16px;
+position: absolute;
+right: 15px;
+top: 21px;
+transition: all .2s;
+}
+
+.b2b-faq-item.active {
+color: {{ section.settings.base_link_color }};
+}
+
+.b2b-faq-item:hover,
+.b2b-faq-item.active:hover {
+color: {{ section.settings.base_link_color }};
+} 
+
+.b2b-faq-item.active svg {
+transform: rotate(180deg);
+}
+
+.b2b-faq-answer {
+overflow: hidden;
+visibility: hidden;
+transition: all .3s ease-in;
+background: #fff;
+max-height: 0
+}
+
+.b2b-faq-item.active .b2b-faq-answer {
+max-height: 100% !important;  
+visibility: visible;
+}
+
+.b2b-faq-answer p {
+margin: 0;
+padding: 0 1em 1em;
+font-weight: normal
+}
+
+.b2b-faq-answer p a {
+color: {{ section.settings.base_link_color }};
+text-decoration: none
+}
+
+.b2b-faq-answer p a:hover {
+text-decoration: underline
+}  
+
+/* Mobile */
+@media only screen and (max-width: 850px) {
+.b2b-login-wrapper {
+  flex-direction: column;
+}
+
+.b2b-intro-image, .b2b-login-area {
+  width: 100%;
+}
+}
+
+</style>
+
+{% comment %}
+
+*********************
+
+NOTES
+This is the JavaScript that controls basic behaviour such as the form showing and the FAQ accordion.
+
+*********************
+
+{% endcomment %}
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // FAQ Accordion Functionality
+    var faqItems = document.querySelectorAll(".b2b-faq-question");
+
+    faqItems.forEach(function(item) {
+        item.addEventListener("click", function() {
+            var answer = this.nextElementSibling;
+            var parent = this.parentElement;
+
+            // Toggle active class
+            parent.classList.toggle("active");
+
+            // Expand/Collapse Answer
+            if (answer.style.maxHeight && answer.style.maxHeight !== "0px") {
+                answer.style.maxHeight = "0px";
+            } else {
+                answer.style.maxHeight = answer.scrollHeight + "px";
+            }
+        });
+    });
+
+    // Ensure the B2B Registration Form is hidden by default
+    var registerForm = document.getElementById("b2b-register");
+    if (registerForm) {
+        registerForm.style.maxHeight = "0px";
+        registerForm.style.overflow = "hidden";
+        registerForm.style.transition = "max-height 0.3s ease-in-out";
+    }
+
+    // Toggle B2B Registration Form
+    window.b2bRegister = function() {
+        if (registerForm.style.maxHeight === "0px" || registerForm.style.maxHeight === "") {
+            registerForm.style.maxHeight = registerForm.scrollHeight + "px";
+        } else {
+            registerForm.style.maxHeight = "0px";
+        }
+    };
+});
+</script>
+
+
+{% comment %}
+
+*********************
+
+NOTES
+This is the scheme that controls the content in the Shopify Customizer tool
+
+*********************
+
+{% endcomment %}
+
+
+
+{% schema %}
+{
+  "name": "Login Page",
+  "settings": [
+    {
+    "type": "header",
+    "content": "Main Layout",
+      "info": "Configure the main layout of your login page. Learn more at docs.sparklayer.io/shopify-registration-form"
+  },
+    {
+  "type": "select",
+  "id": "page_width",
+  "label": "Page Width",
+  "options": [
+      { "value": "fixed", "label": "Fixed Width" },
+      { "value": "full", "label": "Full Width" }
+  ],
+      "default": "fixed"
+  },
+   {
+  "type": "select",
+  "id": "login_type",
+  "label": "Login type",
+  "options": [
+     { "value": "password", "label": "Email address and password" },
+      { "value": "passwordless", "label": "Passwordless login" }
+     
+  ],
+  "default": "password",
+  "info": "Choose how you want customers to sign in. Passwordless will require you to use Shopify 'Customer Accounts'"
+},
+{
+"type": "image_picker",
+"id": "featured_image",
+"label": "Background Image",
+"info": "The image should ideally be rectangular"
+},
+{
+  "type": "select",
+  "id": "background_width",
+  "label": "Background Size",
+  "options": [
+      { "value": "fill", "label": "Fixed width" },
+      { "value": "cover", "label": "Fill container" }
+  ],
+      "default": "cover"
+  },
+{
+"type": "color",
+"id": "background_color",
+"label": "Background color",
+"default": "#f1f1f1"
+},
+
+{
+"type": "range",
+"id": "base_page_spacing",
+"label": "Page Spacing (px)",
+"min": 24,
+"max": 84,
+"step": 6,
+"default": 54
+},
+{
+"type": "header",
+"content": "Font Styling",
+"info": "Set the defaults for the fonts."
+},
+
+{
+"type": "color",
+"id": "base_font_color",
+"label": "Default Font Color",
+"default": "#555"
+},
+{
+"type": "range",
+"id": "base_font_size",
+"label": "Default Font Size (px)",
+"min": 12,
+"max": 24,
+"step": 1,
+"default": 15
+},
+
+
+{
+"type": "color",
+"id": "base_link_color",
+"label": "Default Link Color",
+"default": "#000"
+},
+
+{
+"type": "header",
+"content": "Header Styling",
+"info": "Set the defaults for the page headers."
+},
+{
+"type": "range",
+"id": "base_header_primary_font_size",
+"label": "Heading Font Size (px) - Primary",
+"min": 12,
+"max": 40,
+"step": 1,
+"default": 28
+},
+
+{
+"type": "color",
+"id": "base_header_primary_color",
+"label": "Heading Font Color - Primary",
+"default": "#000"
+},
+
+{
+"type": "range",
+"id": "base_header_secondary_font_size",
+"label": "Heading Font Size (px) - Secondary",
+"min": 12,
+"max": 40,
+"step": 1,
+"default": 20
+},
+
+{
+"type": "color",
+"id": "base_header_secondary_color",
+"label": "Heading Font Color - Secondary",
+"default": "#000"
+},
+
+
+
+{
+"type": "header",
+"content": "Content",
+"info": "Customize the wording of your login page."
+},
+
+{
+"type": "text",
+"id": "title",
+"label": "Title",
+"default": "Welcome to our B2B login"
+},
+{
+"type": "textarea",
+"id": "intro_text",
+"label": "Introduction Text",
+"default": "Sign in below to get instant access to your B2B account and start placing orders."
+},
+
+{
+"type": "text",
+"id": "login_email",
+"label": "Email",
+"default": "Enter your email address"
+},
+
+{
+"type": "text",
+"id": "login_password",
+"label": "Password",
+"default": "Enter your password"
+},
+{
+"type": "text",
+"id": "sign_in",
+"label": "Sign in button",
+"default": "Sign In"
+},
+{
+"type": "text",
+"id": "forgot_password",
+"label": "Forgot password",
+"default": "Forgot password?"
+},
+
+{
+"type": "text",
+"id": "open_account_title",
+"label": "Open Account Title",
+"default": "Interested in opening an account?"
+},
+{
+"type": "richtext",
+"id": "open_account_text",
+"label": "Open Account Text",
+"default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>"
+},
+{
+"type": "text",
+"id": "open_account_button",
+"label": "Open Account Button Title",
+"default": "Apply for an account"
+},
+{
+"type": "text",
+"id": "apply_submit",
+"label": "Submit button",
+"default": "Apply Now"
+},
+{
+"type": "text",
+"id": "form_message_success",
+"label": "Form Submit - Success Message",
+"default": "Thank you for your messsage, we will be in touch shortly."
+},
+{
+"type": "text",
+"id": "form_message_error",
+"label": "Form Submit - Error Message",
+"default": "Sorry, there appears to be an error in your form submission."
+},
+{
+"type": "header",
+"content": "Form Action",
+"info": "Customize how the form works"
+},
+{
+"type": "select",
+"id": "form_action",
+"label": "Form Action",
+"options": [
+{ "value": "email", "label": "Send an email to the store owner" },
+{ "value": "custom_form", "label": "Embed custom contact form" },
+{ "value": "redirect", "label": "Go to new page URL" }
+],
+"default": "email",
+"info": "If using 'Send an email', you can configure this below under 'Form - Send an email'."
+},
+{
+"type": "html",
+"id": "custom_form_html",
+"label": "Custom Contact Form HTML",
+"info": "Only used if 'Embed custom contact form' is selected above.",
+"default": "<p>Paste your custom form HTML here</p>"
+},
+{
+"type": "url",
+"id": "redirect_url",
+"label": "Redirect URL",
+"info": "Only used if 'Go to new page URL' is selected above."
+},
+
+{
+"type": "header",
+"content": "Form - Send an email",
+"info": "When the form is submitted, it will be sent to the store admin of your Shopify store. You can customize the form fields that show and add new ones to the left under 'Login Page'."
+},
+
+{
+"type": "text",
+"id": "form_email_subject",
+"label": "Email subject",
+"default": " New B2B customer application to review",
+"info": "This will show in the email sent via Shopify"
+},
+
+{
+"type": "text",
+"id": "form_email_field1",
+"label": "Field 1",
+"default": "Company Name",
+"info": "Leave blank to remove this field"
+},
+{
+"type": "checkbox",
+"id": "form_email_field1_required",
+"label": "Make this field required?",
+"default": false
+},
+{
+"type": "text",
+"id": "form_email_field2",
+"label": "Field 2",
+"default": "Email",
+"info": "Leave blank to remove this field"
+},
+{
+"type": "checkbox",
+"id": "form_email_field2_required",
+"label": "Make this field required?",
+"default": true
+},
+{
+"type": "text",
+"id": "form_email_field3",
+"label": "Field 3",
+"default": "Phone",
+"info": "Leave blank to remove this field"
+},
+{
+"type": "checkbox",
+"id": "form_email_field3_required",
+"label": "Make this field required?",
+"default": false
+},      
+{
+"type": "text",
+"id": "form_email_field4",
+"label": "Field 4",
+"default": "Your Tax ID",
+"info": "Leave blank to remove this field"
+},
+{
+"type": "checkbox",
+"id": "form_email_field4_required",
+"label": "Make this field required?",
+"default": false
+},
+{
+"type": "text",
+"id": "form_email_field5",
+"label": "Comments",
+"default": "Comments",
+"info": "This field always shows at the end to allow comments to be added.  Leave blank to remove this field"
+},
+{
+"type": "checkbox",
+"id": "form_email_field5_required",
+"label": "Make this field required?",
+"default": false
+},      
+{
+"type": "header",
+"content": "FAQs",
+"info": "Include a FAQ section. You can add FAQs on the left by clicking 'Add FAQs' under 'Login Page'"
+},
+{
+"type": "checkbox",
+"id": "show_faqs",
+"label": "Show FAQs",
+"info": "If enabled, you can manually add FAQs",
+"default": false
+},
+{
+"type": "text",
+"id": "faq_title",
+"label": "FAQs Title",
+"default": "Frequently Asked Questions"
+},
+
+{
+"type": "header",
+"content": "Buttons",
+"info": "Customize the button styles"
+},
+
+{
+"type": "color",
+"id": "button_color",
+"label": "Button Background Color - Primary",
+"default": "#000"
+},
+{
+"type": "color",
+"id": "button_hover_color",
+"label": "Button Background Hover Color - Primary",
+"default": "#333"
+},
+{
+"type": "color",
+"id": "button_font_color",
+"label": "Button Font Color - Primary",
+"default": "#fff"
+},
+
+
+{
+"type": "color",
+"id": "button_border_color",
+"label": "Button Border Color - Primary",
+"default": "#000"
+},
+{
+"type": "color",
+"id": "button_secondary_color",
+"label": "Button Background Color - Secondary",
+"default": "#fff"
+},
+{
+"type": "color",
+"id": "button_secondary_hover_color",
+"label": "Button Background Hover Color - Secondary",
+"default": "#eee"
+},
+{
+"type": "color",
+"id": "button_secondary_font_color",
+"label": "Button Font Color - Secondary",
+"default": "#000"
+},
+
+
+{
+"type": "color",
+"id": "button_secondary_border_color",
+"label": "Button Border Color - Secondary",
+"default": "#000"
+},
+{
+"type": "range",
+"id": "button_font_size",
+"label": "Button Font Size (px)",
+"min": 12,
+"max": 24,
+"step": 1,
+"default": 15
+},
+{
+"type": "range",
+"id": "button_border_radius",
+"label": "Button Border Radius (px)",
+"min": 0,
+"max": 50,
+"step": 1,
+"default": 4
+},
+{
+"type": "header",
+"content": "Form",
+"info": "Customize the form styles"
+},
+{
+"type": "color",
+"id": "input_background",
+"label": "Input Background Color",
+"default": "#ffffff"
+},
+{
+"type": "color",
+"id": "input_border_color",
+"label": "Input Border Color",
+"default": "#ccc"
+},
+{
+"type": "color",
+"id": "input_border_hover_color",
+"label": "Input Border Hover Color",
+"default": "#666"
+},
+{
+"type": "color",
+"id": "input_text_color",
+"label": "Input Text Color",
+"default": "#666"
+},
+{
+"type": "range",
+"id": "input_font_size",
+"label": "Input Font Size (px)",
+"min": 12,
+"max": 24,
+"step": 1,
+"default": 15
+},
+{
+"type": "range",
+"id": "input_border_radius",
+"label": "Input Border Radius (px)",
+"min": 0,
+"max": 50,
+"step": 1,
+"default": 4
+}
+],
+  "blocks": [
+      {
+          "type": "feature",
+          "name": "FAQs",
+          "settings": [
+              {
+                  "type": "text",
+                  "id": "block_title",
+                  "label": "Question",
+                  "default": "What are the benefits of having a B2B account?"
+              },
+              {
+                  "type": "richtext",
+                  "id": "block_text",
+                  "label": "Answer",
+                  "default": "<p>With a B2B account, you get exclusive discounts, bulk pricing, and access to our latest product releases.</p>"
+              }
+          ]
+      },
+    {
+          "type": "form_field",
+          "name": "Form Field",
+          "settings": [
+              {
+                  "type": "text",
+                  "id": "field_name",
+                  "label": "Field Name (for form submission)",
+                  "default": "Field Name Here"
+              },
+              {
+                  "type": "select",
+                  "id": "field_type",
+                  "label": "Field Type",
+                  "options": [
+                      { "value": "text", "label": "Text" },
+                      { "value": "textarea", "label": "Textarea" }
+                  ],
+                  "default": "text"
+              },
+              {
+                  "type": "text",
+                  "id": "placeholder",
+                  "label": "Placeholder Text",
+                  "default": "Enter value"
+              },
+            
+              {
+                  "type": "checkbox",
+                  "id": "field_required",
+                  "label": "Make this field required?",
+                  "default": false
+              }
+          ]
+      }
+  ],
+"presets": [
+  {
+      "name": "Login Page",
+      "category": "Wholesale & B2B"
+  }
+]
+}
+{% endschema %}
