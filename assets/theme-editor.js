@@ -4,6 +4,7 @@ function hideProductModal() {
 }
 
 document.addEventListener('shopify:block:select', function (event) {
+  console.log(event);
   hideProductModal();
   const blockSelectedIsSlide = event.target.classList.contains('slideshow__slide');
   if (!blockSelectedIsSlide) return;
@@ -38,7 +39,10 @@ document.addEventListener('shopify:section:load', () => {
 
 document.addEventListener('shopify:section:reorder', () => hideProductModal());
 
-document.addEventListener('shopify:section:select', () => hideProductModal());
+document.addEventListener('shopify:section:select', (event) => {
+  console.log(event);
+  hideProductModal()
+});
 
 document.addEventListener('shopify:section:deselect', () => hideProductModal());
 
