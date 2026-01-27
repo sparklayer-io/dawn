@@ -96,7 +96,7 @@
                   "
                   src="{{ card_product.media[1] | image_url: width: 533 }}"
                   sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
-                  alt=""
+                  alt="{{ card_product.media[1].alt | escape }}"
                   class="motion-reduce"
                   loading="lazy"
                   width="{{ card_product.media[1].width }}"
@@ -216,7 +216,7 @@
               {%- else -%}
                 {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
                 {%- if card_product.quantity_price_breaks_configured? -%}
-                  {% if card_product.variants.size == 1 and quick_add == 'bulk' %}
+                  {% if card_product.variants_count == 1 and quick_add == 'bulk' %}
                     {% liquid
                       assign quantity_rule = card_product.selected_or_first_available_variant.quantity_rule
                       assign has_qty_rules = false
@@ -236,7 +236,7 @@
                       <span class="caption">{{ 'products.product.volume_pricing.note' | t }}</span>
                     </div>
                   {% endif %}
-                  {% if card_product.variants.size == 1 and quick_add == 'bulk' %}
+                  {% if card_product.variants_count == 1 and quick_add == 'bulk' %}
                     <div
                       class="global-settings-popup quantity-popover__info"
                       tabindex="-1"
@@ -267,7 +267,7 @@
                         type="button"
                         aria-label="{{ 'accessibility.close' | t }}"
                       >
-                        {%- render 'icon-close' -%}
+                        {{- 'icon-close.svg' | inline_asset_content -}}
                       </button>
                       {%- if card_product.selected_or_first_available_variant.quantity_price_breaks.size > 0 -%}
                         <volume-pricing class="parent-display">
@@ -293,10 +293,10 @@
                         </volume-pricing>
                       {%- endif -%}
                     </div>
-                    </quantity-popover>
-                  {% endif %}
-                {%- endif -%}
-               {%- endif -%}
+                  </quantity-popover>
+                {% endif %}
+              {%- endif -%}
+            {%- endif -%}
           </div>
         </div>
         {% assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id %}
@@ -308,7 +308,7 @@
                 assign qty_rules = true
               endif
             -%}
-            {%- if card_product.variants.size > 1 or qty_rules -%}
+            {%- if card_product.variants_count > 1 or qty_rules -%}
               <modal-opener data-modal="#QuickAdd-{{ card_product.id }}">
                 <button
                   id="{{ product_form_id }}-submit"
@@ -321,7 +321,9 @@
                 >
                   {{ 'products.product.choose_options' | t }}
                   {%- if horizontal_quick_add -%}
-                    <span class="icon-wrap">{% render 'icon-arrow' %}</span>
+                    <span class="icon-wrap">
+                      {{- 'icon-arrow.svg' | inline_asset_content -}}
+                    </span>
                   {%- endif -%}
                   {%- render 'loading-spinner' -%}
                 </button>
@@ -340,7 +342,7 @@
                     class="quick-add-modal__toggle"
                     aria-label="{{ 'accessibility.close' | t }}"
                   >
-                    {% render 'icon-close' %}
+                    {{- 'icon-close.svg' | inline_asset_content -}}
                   </button>
                   <div id="QuickAddInfo-{{ card_product.id }}" class="quick-add-modal__content-info"></div>
                 </div>
@@ -387,7 +389,9 @@
                       {{ 'products.product.sold_out' | t }}
                     </span>
                     {%- if horizontal_quick_add -%}
-                      <span class="icon-wrap">{% render 'icon-plus' %}</span>
+                      <span class="icon-wrap">
+                        {{- 'icon-plus.svg' | inline_asset_content -}}
+                      </span>
                     {%- endif -%}
                     {%- render 'loading-spinner' -%}
                   </button>
@@ -396,7 +400,7 @@
             {%- endif -%}
           </div>
         {% elsif quick_add == 'bulk' %}
-          {% if card_product.variants.size == 1 %}
+          {% if card_product.variants_count == 1 %}
             <quick-add-bulk
               data-min="{{ card_product.selected_or_first_available_variant.quantity_rule.min }}"
               id="quick-add-bulk-{{ card_product.selected_or_first_available_variant.id }}-{{ section.id }}"
@@ -465,7 +469,7 @@
                     class="quick-add-modal__toggle"
                     aria-label="{{ 'accessibility.close' | t }}"
                   >
-                    {% render 'icon-close' %}
+                    {{- 'icon-close.svg' | inline_asset_content -}}
                   </button>
                   <div
                     id="QuickAddInfo-{{ card_product.id }}"
@@ -512,7 +516,7 @@
                           class="link product__view-details animate-arrow small-hide medium-hide"
                         >
                           {{ 'products.product.view_full_details' | t -}}
-                          {% render 'icon-arrow' %}
+                          {{- 'icon-arrow.svg' | inline_asset_content -}}
                         </a>
                       </div>
                       <div class="quick-add-modal__content-info--bulk-details large-up-hide">
@@ -578,6 +582,7 @@
 {%- else -%}
   {%- liquid
     assign ratio = 1
+    assign placeholder = true
     if media_aspect_ratio == 'portrait'
       assign ratio = 0.8
     endif
@@ -605,7 +610,7 @@
               {{ placeholder_image | placeholder_svg_tag: 'placeholder-svg' }}
             {%- else -%}
               {{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}
-            {%- endif -%}
+            {% endif %}
           </div>
         </div>
       </div>
@@ -621,7 +626,7 @@
               <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
               <div class="caption-with-letter-spacing light">{{ 'products.product.vendor' | t }}</div>
             {%- endif -%}
-            {% render 'price', show_compare_at_price: true %}
+            {% render 'price', placeholder: placeholder, show_compare_at_price: true %}
           </div>
         </div>
       </div>
