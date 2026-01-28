@@ -171,7 +171,7 @@ if (!customElements.get('quick-add-bulk')) {
         this.getSectionsToRender().forEach((section) => {
           const sectionElement = document.getElementById(section.id);
           if (section.section === 'cart-drawer') {
-            sectionElement.closest('cart-drawer')?.classList.toggle('is-empty', parsedState.items.length.length === 0);
+            sectionElement.closest('cart-drawer')?.classList.toggle('is-empty', parsedState.items.length === 0);
           }
           const elementToReplace =
             sectionElement && sectionElement.querySelector(section.selector)
