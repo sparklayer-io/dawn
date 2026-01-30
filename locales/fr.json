@@ -109,7 +109,7 @@
     "product": {
       "add_to_cart": "Ajouter au panier",
       "description": "Description",
-      "on_sale": "En vente",
+      "on_sale": "Promotion",
       "product_variants": "Variantes de produits",
       "quantity": {
         "label": "Quantité",
@@ -122,10 +122,11 @@
         "in_cart_html": "<span class=\"quantity-cart\">{{ quantity }}</span> dans le panier",
         "note": "Voir les règles de quantité",
         "min_of": "Min. {{ quantity }}",
-        "max_of": "Max. {{ quantity }}"
+        "max_of": "Max. {{ quantity }}",
+        "in_cart_aria_label": "Quantité ({{ quantity }} dans le panier)"
       },
       "price": {
-        "from_price_html": "Du {{ price }}",
+        "from_price_html": "À partir de {{ price }}",
         "regular_price": "Prix habituel",
         "sale_price": "Prix promotionnel",
         "unit_price": "Prix unitaire"
@@ -156,6 +157,7 @@
         "load_video": "Lire la vidéo {{ index }} dans la galerie",
         "image_available": "L'image {{ index }} est maintenant disponible dans la galerie"
       },
+      "nested_label": "{{ title }} pour {{ parent_title }}",
       "view_full_details": "Afficher tous les détails",
       "shipping_policy_html": "<a href=\"{{ link }}\">Frais d'expédition</a> calculés à l'étape de paiement.",
       "choose_options": "Choisir des options",
@@ -173,8 +175,8 @@
         "title": "Tarification basée sur le volume",
         "note": "La tarification basée sur le volume est disponible",
         "minimum": "{{ quantity }} ou plus",
-        "price_at_each": "à {{ price }}/pièce",
-        "price_range": "{{ minimum }} - {{ maximum }}"
+        "price_range": "{{ minimum }} - {{ maximum }}",
+        "price_at_each_html": "à {{ price }}/pièce"
       },
       "taxes_included": "Taxes incluses.",
       "duties_included": "Frais de douane inclus.",
@@ -454,7 +456,7 @@
       "order_number_link": "Numéro de commande {{ number }}",
       "date": "Date",
       "payment_status": "Statut des paiements",
-      "fulfillment_status": "Statut des commandes",
+      "fulfillment_status": "Statut du traitement de la commande",
       "total": "Total",
       "none": "Vous n'avez encore passé aucune commande."
     },
@@ -486,7 +488,7 @@
       "billing_address": "Adresse de facturation",
       "payment_status": "Statut de paiement",
       "shipping_address": "Adresse d'expédition",
-      "fulfillment_status": "Statut des commandes",
+      "fulfillment_status": "Statut du traitement de la commande",
       "discount": "Réduction",
       "shipping": "Expédition",
       "tax": "Taxes",
