@@ -1,5 +1,9 @@
 # Dawn with SparkLayer
 
+**⚠️ SparkLayer no longer maintains this fork**
+
+---
+
 This repository contains [SparkLayer](https://sparklayer.io)'s fork of Shopify's [Dawn](https://github.com/Shopify/dawn) theme. This fork includes SparkLayer's widgets.
 
 See [sparklayer_fork_maintenance.md](sparklayer_fork_maintenance.md) for a short guide on keeping this fork up to date.
